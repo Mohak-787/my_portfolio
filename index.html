@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mohak Devkota | Software Developer Portfolio</title>
+    <style>
+        /* --- Google Font Import --- */
+        @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+
+        /* --- CSS Variables (Root) --- */
+        :root {
+            --primary-bg: #010413;
+            --secondary-bg: #0a0f2a;
+            --accent-glow: #00f7ff;
+            --accent-glow-transparent: rgba(0, 247, 255, 0.1);
+            --primary-text: #d0d0d0;
+            --heading-text: #ffffff;
+            --border-color: rgba(0, 247, 255, 0.2);
+            --border-hover: rgba(0, 247, 255, 0.8);
+        }
+
+        /* --- Keyframe Animations --- */
+        @keyframes pulse-glow-glitch {
+            0% {
+                text-shadow: 0 0 8px var(--accent-glow), 0 0 10px #ff00c1, 0 0 12px #4800ff;
+                transform: skewX(-0.5deg) translateX(-1px);
+            }
+            25% {
+                text-shadow: 0 0 12px var(--accent-glow), 0 0 15px #ff00c1, 0 0 18px #4800ff;
+                transform: skewX(0.5deg) translateX(1px);
+            }
+            50% {
+                text-shadow: 0 0 8px var(--accent-glow), 0 0 10px #ff00c1, 0 0 12px #4800ff;
+                transform: skewX(0) translateX(0);
+            }
+            75% {
+                text-shadow: 0 0 12px var(--accent-glow), 0 0 15px #ff00c1, 0 0 18px #4800ff;
+                 transform: skewX(-0.5deg) translateX(-1px);
+            }
+            100% {
+                text-shadow: 0 0 8px var(--accent-glow), 0 0 10px #ff00c1, 0 0 12px #4800ff;
+                transform: skewX(0) translateX(0);
+            }
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(100%); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- General Body & Typography --- */
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--primary-bg);
+            color: var(--primary-text);
+            font-family: 'Share Tech Mono', monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 1.7;
+            /* Remove grid background */
+            background-image: none;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            color: var(--heading-text);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: normal;
+        }
+
+        h2 {
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background-color: var(--accent-glow);
+            box-shadow: 0 0 5px var(--accent-glow);
+        }
+
+        a {
+            color: var(--accent-glow);
+            text-decoration: none;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        a:hover {
+            color: #fff;
+            text-shadow: 0 0 8px var(--accent-glow);
+        }
+
+        /* --- Layout & Containers --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            text-align: center;
+            animation: fadeIn 1s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+            position: relative;
+            z-index: 2;
+            background-color: var(--primary-bg);
+            transition: background 0.4s, box-shadow 0.4s;
+        }
+
+        section:last-of-type { border-bottom: none; }
+        
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-content { z-index: 1; position: relative; }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin: 0;
+            animation: pulse-glow-glitch 4s infinite ease-in-out alternate;
+        }
+
+        .hero .tagline {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            margin-top: 1rem;
+            color: var(--primary-text);
+            letter-spacing: 1.5px;
+        }
+        
+        .hero .location {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: var(--primary-text);
+            opacity: 0.7;
+        }
+
+        /* --- Card Styling (Used for About, Skills, Projects) --- */
+        .card {
+            background-color: var(--accent-glow-transparent);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            transition: border-color 0.4s, box-shadow 0.4s, transform 0.4s, background 0.4s;
+            box-shadow: 0 2px 24px 0 rgba(0,247,255,0.08);
+        }
+
+        .card:hover {
+            border-color: var(--border-hover);
+            box-shadow: 0 0 32px var(--accent-glow-transparent);
+            transform: translateY(-4px) scale(1.03);
+            background-color: rgba(0,247,255,0.18);
+        }
+        
+        /* --- 3D Tilt Effect on Cards --- */
+        .tilt-parent {
+            perspective: 1000px;
+        }
+        .tilt-child {
+            transition: transform 0.4s ease;
+        }
+        .tilt-parent:hover .tilt-child {
+            transform: rotateY(5deg) rotateX(10deg) scale(1.05);
+        }
+
+
+        /* --- About Section --- */
+        #about .card {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        /* --- Skills Section --- */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .skill-item {
+            background-color: var(--secondary-bg);
+            padding: 1.5rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s cubic-bezier(0.77, 0, 0.175, 1);
+            box-shadow: 0 2px 12px 0 rgba(0,247,255,0.04);
+            font-size: 1.05rem;
+        }
+
+        .skill-item:hover {
+            background-color: var(--accent-glow-transparent);
+            box-shadow: 0 0 18px var(--accent-glow);
+            transform: translateY(-6px) scale(1.07);
+            border-color: var(--border-hover);
+        }
+
+        /* --- Projects Section --- */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .project-card {
+            text-align: left;
+            transition: box-shadow 0.4s, transform 0.4s;
+        }
+        
+        .project-card:hover {
+            box-shadow: 0 0 32px var(--accent-glow-transparent);
+            transform: translateY(-6px) scale(1.04);
+        }
+        
+        .project-card h3 {
+            color: var(--accent-glow);
+            font-size: 1.2rem;
+        }
+        
+        .project-card .status {
+            font-style: italic;
+            opacity: 0.7;
+            font-size: 0.9rem;
+            color: var(--accent-glow);
+        }
+        
+        .project-card .tech-stack {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* --- Contact Section --- */
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .social-icons a svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--primary-text);
+            transition: fill 0.3s ease, transform 0.3s ease;
+        }
+
+        .social-icons a:hover svg {
+            fill: var(--accent-glow);
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            font-size: 0.9rem;
+            color: var(--primary-text);
+            opacity: 0.6;
+            position: relative;
+            z-index: 2;
+            background-color: var(--primary-bg);
+        }
+        
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            h2 { font-size: 1.5rem; }
+            section { padding: 2.5rem 0; }
+            .container { padding: 0 0.5rem; }
+            .skills-grid { gap: 1rem; }
+            .projects-grid { gap: 1rem; }
+            .card { padding: 1.2rem; }
+            .hero h1 { font-size: 2rem; }
+            .hero .tagline { font-size: 1rem; }
+            .hero { height: 60vh; min-height: 320px; }
+        }
+
+        /* --- Extra Small Devices --- */
+        @media (max-width: 480px) {
+            h2 { font-size: 1.1rem; }
+            .card { padding: 0.8rem; }
+            .hero h1 { font-size: 1.3rem; }
+            .hero .tagline { font-size: 0.9rem; }
+            .hero { height: 40vh; min-height: 180px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <header id="hero" class="hero">
+        <canvas id="hero-canvas"></canvas>
+        <div class="hero-content">
+            <h1>Mohak Devkota</h1>
+            <p class="tagline">Computer Science Student | Aspiring Software Developer</p>
+            <p class="location">Lalitpur, Nepal</p>
+        </div>
+    </header>
+
+    <main>
+        <section id="about">
+            <div class="container">
+                <h2>01 // About Me</h2>
+                <div class="card">
+                    <p>
+                        I am a passionate and driven first-year Computer Science student with a strong foundation in languages like Python, JavaScript, and C#. My goal is to become a versatile software developer, and I am deeply enthusiastic about building scalable software solutions and exploring the innovative world of AI and FinTech. I am a quick learner, dedicated to honing my skills by turning theoretical knowledge into practical, real-world applications.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <h2>02 // Core Skills</h2>
+                <div class="skills-grid">
+                    <div class="skill-item">Python</div>
+                    <div class="skill-item">JavaScript</div>
+                    <div class="skill-item">Flask</div>
+                    <div class="skill-item">HTML & CSS</div>
+                    <div class="skill-item">C#</div>
+                    <div class="skill-item">C</div>
+                    <div class="skill-item">PHP</div>
+                    <div class="skill-item">Git</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="container">
+                <h2>03 // Projects</h2>
+                <div class="projects-grid">
+                    <div class="tilt-parent">
+                        <div class="project-card card tilt-child">
+                            <h3>Bytellect Quiz Game</h3>
+                            <p>An interactive quiz game based on the Grade 12 Computer Science curriculum for Nepal's NEB board, designed to make learning engaging and fun.</p>
+                            <p class="tech-stack"><strong>Tech:</strong> Python, Flask, JavaScript, HTML, CSS</p>
+                            <p class="status">Status: Completed</p>
+                        </div>
+                    </div>
+                    <div class="tilt-parent">
+                        <div class="project-card card tilt-child">
+                            <h3>AI-Driven FinTech App</h3>
+                            <p>A concept for a mobile application that uses machine learning to provide personalized financial advice and budget tracking.</p>
+                             <p class="tech-stack"><strong>Tech:</strong> Python, TensorFlow, Swift/Kotlin</p>
+                            <p class="status">Status: Planning Phase</p>
+                        </div>
+                    </div>
+                    <div class="tilt-parent">
+                        <div class="project-card card tilt-child">
+                            <h3>Scalable E-Commerce API</h3>
+                            <p>A backend service designed to handle product management, user authentication, and order processing for an online store.</p>
+                            <p class="tech-stack"><strong>Tech:</strong> C#, .NET, SQL, Docker</p>
+                            <p class="status">Status: Coming Soon</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>04 // Connect</h2>
+                <p>Let's connect and collaborate on innovative projects.</p>
+                <div class="social-icons">
+                    <a href="https://github.com/Mohak-787" target="_blank" aria-label="GitHub Profile">
+                        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    </a>
+                    <a href="https://www.linkedin.com/in/mohak-devkota/" target="_blank" aria-label="LinkedIn Profile">
+                        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>LinkedIn</title><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Mohak Devkota. All rights reserved. System Interface Loaded.</p>
+        </div>
+    </footer>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.querySelector('#hero-canvas'),
+                alpha: true
+            });
+
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.position.z = 50;
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 5000;
+            const posArray = new Float32Array(particlesCount * 3);
+            for (let i = 0; i < particlesCount * 3; i++) {
+                posArray[i] = (Math.random() - 0.5) * (Math.random() * 5) * 100;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0x00f7ff,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+            
+            // Plexus Lines
+            const linesGeometry = new THREE.BufferGeometry();
+            const linesMaterial = new THREE.LineBasicMaterial({
+                color: 0x00f7ff,
+                transparent: true,
+                opacity: 0.1,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+
+            const positions = particlesGeometry.attributes.position.array;
+            const linePositions = [];
+            const linesMesh = new THREE.LineSegments(linesGeometry, linesMaterial);
+            scene.add(linesMesh);
+
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (event) => {
+                mouseX = event.clientX;
+                mouseY = event.clientY;
+            });
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+
+                // Particle animation
+                particlesMesh.rotation.y += 0.0002;
+
+                // Plexus effect update logic
+                linePositions.length = 0;
+                let vertexpos = 0;
+                for (let i = 0; i < particlesCount; i++) {
+                    const ix = positions[i * 3];
+                    const iy = positions[i * 3 + 1];
+                    const iz = positions[i * 3 + 2];
+                    
+                    for (let j = i + 1; j < particlesCount; j++) {
+                        const jx = positions[j * 3];
+                        const jy = positions[j * 3 + 1];
+                        const jz = positions[j * 3 + 2];
+                        const dx = ix - jx;
+                        const dy = iy - jy;
+                        const dz = iz - jz;
+                        const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+                        
+                        if (distance < 12) {
+                            linePositions.push(ix, iy, iz);
+                            linePositions.push(jx, jy, jz);
+                        }
+                    }
+                }
+                linesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(linePositions, 3));
+
+
+                // Mouse movement effect
+                const targetX = mouseX * 0.02;
+                const targetY = mouseY * 0.02;
+                camera.position.x += (targetX - camera.position.x) * 0.4; // was 0.15
+                camera.position.y += (-targetY - camera.position.y) * 0.4; // was 0.15
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+            };
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animate();
+        });
+    </script>
+
+</body>
+</html>
