@@ -1,0 +1,12 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Montserrat', 'Inter', sans-serif;
+  background-color: #000;
+  color: #fff;
+  overflow: hidden; /* No scrolling for full screen space scene */
+}
