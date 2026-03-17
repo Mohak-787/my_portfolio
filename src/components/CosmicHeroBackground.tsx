@@ -9,7 +9,7 @@ const CosmicHeroBackground: React.FC = () => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    
+
     let stars: { x: number; y: number; size: number; baseOpacity: number; phase: number }[] = [];
     const starCount = 200;
 
@@ -34,7 +34,7 @@ const CosmicHeroBackground: React.FC = () => {
 
       stars.forEach(star => {
         const opacity = star.baseOpacity + Math.sin(time * 0.001 + star.phase) * 0.2;
-        
+
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(226, 232, 240, ${Math.max(0.1, opacity)})`;
@@ -63,7 +63,7 @@ const CosmicHeroBackground: React.FC = () => {
   }, []);
 
   return (
-    <div 
+    <div
       style={{
         width: '100vw',
         height: '100vh',
@@ -93,7 +93,7 @@ const CosmicHeroBackground: React.FC = () => {
       />
 
       {/* Atmospheric Central Glow (Vertical Column/Pillar) */}
-      <div 
+      <div
         style={{
           position: 'absolute',
           bottom: '12vh',
@@ -109,7 +109,7 @@ const CosmicHeroBackground: React.FC = () => {
       />
 
       {/* Subtle Horizon Glow */}
-      <div 
+      <div
         style={{
           position: 'absolute',
           bottom: '29vh',
@@ -125,7 +125,7 @@ const CosmicHeroBackground: React.FC = () => {
       />
 
       {/* Detailed Hero Content Overlay */}
-      <div 
+      <div
         style={{
           position: 'absolute',
           top: '42%',
@@ -142,7 +142,7 @@ const CosmicHeroBackground: React.FC = () => {
         }}
       >
         {/* Pill Badge */}
-        <div 
+        <div
           style={{
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             color: '#0f172a',
@@ -167,7 +167,7 @@ const CosmicHeroBackground: React.FC = () => {
         </div>
 
         {/* Main Heading */}
-        <h1 
+        <h1
           style={{
             fontSize: 'max(48px, 8vw)',
             fontWeight: 800,
@@ -185,7 +185,7 @@ const CosmicHeroBackground: React.FC = () => {
         </h1>
 
         {/* Subheading */}
-        <p 
+        <p
           style={{
             fontSize: 'max(16px, 1.8vw)',
             color: '#94A3B8',
@@ -200,7 +200,8 @@ const CosmicHeroBackground: React.FC = () => {
         </p>
 
         {/* Action Buttons */}
-        <div 
+        <div
+          className="hero-buttons"
           style={{
             display: 'flex',
             gap: '20px',
@@ -208,13 +209,13 @@ const CosmicHeroBackground: React.FC = () => {
             opacity: 0,
           }}
         >
-          <button 
+          <button
             style={{
-              backgroundColor: '#000000',
-              color: '#FFFFFF',
+              backgroundColor: '#3B82F6',
+              color: '#F8FAFC',
               padding: '16px 36px',
               borderRadius: '9999px',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(59, 130, 246, 0.3)',
               fontSize: '15px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -222,14 +223,16 @@ const CosmicHeroBackground: React.FC = () => {
               alignItems: 'center',
               gap: '10px',
               transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.5)',
+              boxShadow: '0 4px 20px rgba(59, 130, 246, 0.35)',
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = '#1a1a1a';
+              e.currentTarget.style.backgroundColor = '#2563EB';
+              e.currentTarget.style.boxShadow = '0 8px 30px rgba(59, 130, 246, 0.5)';
               e.currentTarget.style.transform = 'translateY(-2px)';
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = '#000000';
+              e.currentTarget.style.backgroundColor = '#3B82F6';
+              e.currentTarget.style.boxShadow = '0 4px 20px rgba(59, 130, 246, 0.35)';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
@@ -239,14 +242,14 @@ const CosmicHeroBackground: React.FC = () => {
               <path d="M20 20H4" />
             </svg>
           </button>
-          
-          <button 
+
+          <button
             style={{
-              backgroundColor: '#FFFFFF',
-              color: '#000000',
+              backgroundColor: 'rgba(248, 250, 252, 0.95)',
+              color: '#0B0B10',
               padding: '16px 36px',
               borderRadius: '9999px',
-              border: 'none',
+              border: '1px solid rgba(148, 163, 184, 0.2)',
               fontSize: '15px',
               fontWeight: 600,
               cursor: 'pointer',
@@ -254,14 +257,14 @@ const CosmicHeroBackground: React.FC = () => {
               alignItems: 'center',
               gap: '10px',
               transition: 'all 0.3s ease',
-              boxShadow: '0 10px 20px -5px rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.15)',
             }}
             onMouseOver={(e) => {
-              e.currentTarget.style.boxShadow = '0 15px 30px -5px rgba(255, 255, 255, 0.3)';
+              e.currentTarget.style.boxShadow = '0 15px 30px -5px rgba(59, 130, 246, 0.3)';
               e.currentTarget.style.transform = 'translateY(-2px)';
             }}
             onMouseOut={(e) => {
-              e.currentTarget.style.boxShadow = '0 10px 20px -5px rgba(255, 255, 255, 0.2)';
+              e.currentTarget.style.boxShadow = '0 10px 20px -5px rgba(59, 130, 246, 0.15)';
               e.currentTarget.style.transform = 'translateY(0)';
             }}
           >
@@ -274,10 +277,10 @@ const CosmicHeroBackground: React.FC = () => {
       </div>
 
       {/* The Refined Horizon Arc (Moderate Curve) */}
-      <div 
+      <div
         style={{
           position: 'relative',
-          width: '100%', 
+          width: '100%',
           height: '40vh',
           zIndex: 10,
           overflow: 'hidden',
@@ -315,7 +318,7 @@ const CosmicHeroBackground: React.FC = () => {
             d="M -100,300 L 1100,300 L 1100,250 Q 500,50 -100,250 Z"
             fill="#000000"
           />
-          
+
           {/* Detailed Rim Path */}
           <path
             d="M -100,250 Q 500,50 1100,250"
@@ -328,7 +331,7 @@ const CosmicHeroBackground: React.FC = () => {
       </div>
 
       {/* Deep black overlap for the horizon area */}
-      <div 
+      <div
         style={{
           position: 'absolute',
           bottom: 0,
@@ -351,6 +354,18 @@ const CosmicHeroBackground: React.FC = () => {
         @keyframes fadeInUp {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
+        }
+        @media (max-width: 640px) {
+          .hero-buttons {
+            flex-direction: column !important;
+            align-items: center !important;
+            width: 100% !important;
+            max-width: 280px !important;
+          }
+          .hero-buttons button {
+            width: 100% !important;
+            justify-content: center !important;
+          }
         }
       `}</style>
     </div>
