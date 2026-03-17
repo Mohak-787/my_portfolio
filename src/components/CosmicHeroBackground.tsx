@@ -92,6 +92,112 @@ const CosmicHeroBackground: React.FC = () => {
         }}
       />
 
+      {/* Floating Navbar */}
+      <nav
+        className="cosmic-navbar"
+        style={{
+          position: 'absolute',
+          top: '16px',
+          left: '32px',
+          right: '32px',
+          zIndex: 50,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '10px 8px',
+          animation: 'fadeInDown 0.8s ease-out forwards',
+        }}
+      >
+        {/* Logo - left aligned */}
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+          <img
+            src="images/icon.png"
+            alt="Mohak Devkota Logo"
+            style={{ width: '44px', height: '44px', borderRadius: '10px', objectFit: 'contain' }}
+          />
+        </div>
+
+        {/* Center Nav Links */}
+        <div
+          className="nav-links"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            backgroundColor: 'rgba(15, 23, 42, 0.6)',
+            borderRadius: '9999px',
+            padding: '4px 6px',
+            border: '1px solid rgba(148, 163, 184, 0.15)',
+            backdropFilter: 'blur(16px)',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+          }}
+        >
+          {['Home', 'Projects', 'About'].map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              style={{
+                padding: '10px 32px',
+                borderRadius: '9999px',
+                fontSize: '14px',
+                fontWeight: 500,
+                color: '#CBD5E1',
+                textDecoration: 'none',
+                transition: 'all 0.2s ease',
+                cursor: 'pointer',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.color = '#F8FAFC';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.color = '#CBD5E1';
+              }}
+            >
+              {item}
+            </a>
+          ))}
+        </div>
+
+        {/* Contact CTA Button - right aligned */}
+        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+          <a
+            href="#contact"
+            style={{
+              padding: '10px 24px',
+              borderRadius: '9999px',
+              backgroundColor: '#3B82F6',
+              color: '#F8FAFC',
+              fontSize: '14px',
+              fontWeight: 600,
+              textDecoration: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#2563EB';
+              e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.45)';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#3B82F6';
+              e.currentTarget.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            Contact
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 17L17 7M17 7H7M17 7V17" />
+            </svg>
+          </a>
+        </div>
+      </nav>
+
       {/* Atmospheric Central Glow (Vertical Column/Pillar) */}
       <div
         style={{
@@ -128,151 +234,164 @@ const CosmicHeroBackground: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: '42%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '100%',
-          maxWidth: '1200px',
-          textAlign: 'center',
+          inset: 0,
           zIndex: 20,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: '0 20px',
+          justifyContent: 'center',
+          textAlign: 'center',
+          padding: '0 clamp(16px, 4vw, 32px)',
         }}
       >
-        {/* Pill Badge */}
         <div
           style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            color: '#0f172a',
-            padding: '8px 20px',
-            borderRadius: '9999px',
-            fontSize: '13px',
-            fontWeight: 700,
-            letterSpacing: '0.05em',
-            textTransform: 'uppercase',
+            maxWidth: '1100px',
             display: 'flex',
+            flexDirection: 'column',
             alignItems: 'center',
-            gap: '8px',
-            marginBottom: '40px',
-            boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.3)',
-            animation: 'fadeInDown 0.8s ease-out forwards',
+            transform: 'translateY(-6vh)',
           }}
         >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-          Powering Apps Behind the Scenes
-        </div>
-
-        {/* Main Heading */}
-        <h1
-          style={{
-            fontSize: 'max(48px, 8vw)',
-            fontWeight: 800,
-            lineHeight: 1.1,
-            letterSpacing: '-0.02em',
-            margin: '0 0 16px 0',
-            background: 'linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            animation: 'fadeInUp 1s ease-out 0.2s forwards',
-            opacity: 0,
-          }}
-        >
-          Mohak Devkota
-        </h1>
-
-        {/* Subheading */}
-        <p
-          style={{
-            fontSize: 'max(16px, 1.8vw)',
-            color: '#94A3B8',
-            maxWidth: '600px',
-            margin: '0 0 48px 0',
-            fontWeight: 400,
-            animation: 'fadeInUp 1s ease-out 0.4s forwards',
-            opacity: 0,
-          }}
-        >
-          Backend Developer
-        </p>
-
-        {/* Action Buttons */}
-        <div
-          className="hero-buttons"
-          style={{
-            display: 'flex',
-            gap: '20px',
-            animation: 'fadeInUp 1s ease-out 0.6s forwards',
-            opacity: 0,
-          }}
-        >
-          <button
+          {/* Pill Badge */}
+          <div
             style={{
-              backgroundColor: '#3B82F6',
-              color: '#F8FAFC',
-              padding: '16px 36px',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              color: '#0f172a',
+              padding: '6px 18px',
               borderRadius: '9999px',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
-              fontSize: '15px',
+              fontSize: '13px',
               fontWeight: 600,
-              cursor: 'pointer',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
               display: 'flex',
               alignItems: 'center',
-              gap: '10px',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 20px rgba(59, 130, 246, 0.35)',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = '#2563EB';
-              e.currentTarget.style.boxShadow = '0 8px 30px rgba(59, 130, 246, 0.5)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = '#3B82F6';
-              e.currentTarget.style.boxShadow = '0 4px 20px rgba(59, 130, 246, 0.35)';
-              e.currentTarget.style.transform = 'translateY(0)';
+              gap: '8px',
+              marginBottom: '22px',
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+              animation: 'fadeInDown 0.8s ease-out forwards',
             }}
           >
-            Download CV
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 13L12 18L17 13M12 18V4" />
-              <path d="M20 20H4" />
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
             </svg>
-          </button>
+            Powering Apps Behind the Scenes
+          </div>
 
-          <button
+          {/* Main Heading */}
+          <h1
             style={{
-              backgroundColor: 'rgba(248, 250, 252, 0.95)',
-              color: '#0B0B10',
-              padding: '16px 36px',
-              borderRadius: '9999px',
-              border: '1px solid rgba(148, 163, 184, 0.2)',
-              fontSize: '15px',
-              fontWeight: 600,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 10px 20px -5px rgba(59, 130, 246, 0.15)',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.boxShadow = '0 15px 30px -5px rgba(59, 130, 246, 0.3)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.boxShadow = '0 10px 20px -5px rgba(59, 130, 246, 0.15)';
-              e.currentTarget.style.transform = 'translateY(0)';
+              fontSize: 'clamp(56px, 5.8vw, 72px)',
+              fontWeight: 800,
+              lineHeight: 1.1,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+              margin: '0 0 18px 0',
+              background: 'linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              animation: 'fadeInUp 1s ease-out 0.2s forwards',
+              opacity: 0,
             }}
           >
-            View source
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
+            Mohak Devkota
+          </h1>
+
+          {/* Subheading */}
+          <p
+            style={{
+              fontSize: '19px',
+              color: '#94A3B8',
+              maxWidth: '600px',
+              margin: '0 0 30px 0',
+              fontWeight: 400,
+              lineHeight: 1.6,
+              animation: 'fadeInUp 1s ease-out 0.4s forwards',
+              opacity: 0,
+            }}
+          >
+            Backend Developer
+          </p>
+
+          {/* Action Buttons */}
+          <div
+            className="hero-buttons"
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '14px',
+              animation: 'fadeInUp 1s ease-out 0.6s forwards',
+              opacity: 0,
+            }}
+          >
+            <button
+              style={{
+                backgroundColor: '#3B82F6',
+                color: '#F8FAFC',
+                padding: '12px 20px',
+                borderRadius: '11px',
+                border: '1px solid rgba(59, 130, 246, 0.45)',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#2563EB';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.45)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = '#3B82F6';
+                e.currentTarget.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              Download CV
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M7 13L12 18L17 13M12 18V4" />
+                <path d="M20 20H4" />
+              </svg>
+            </button>
+
+            <button
+              style={{
+                backgroundColor: 'rgba(241, 245, 249, 0.95)',
+                color: '#0F172A',
+                padding: '12px 20px',
+                borderRadius: '11px',
+                border: '1px solid rgba(148, 163, 184, 0.2)',
+                fontSize: '14px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = '#FFFFFF';
+                e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.12)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(241, 245, 249, 0.95)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              View source
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -365,6 +484,15 @@ const CosmicHeroBackground: React.FC = () => {
           .hero-buttons button {
             width: 100% !important;
             justify-content: center !important;
+          }
+          .nav-links {
+            display: none !important;
+          }
+          .cosmic-navbar {
+            padding: 10px 16px !important;
+            top: 12px !important;
+            left: 12px !important;
+            right: 12px !important;
           }
         }
       `}</style>
