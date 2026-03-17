@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 const CosmicHeroBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number>();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -10,7 +11,7 @@ const CosmicHeroBackground: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let stars: { x: number; y: number; size: number; baseOpacity: number; phase: number }[] = [];
+    let stars: { x: number; y: number; size: number; baseOpacity: number; phase: number; speed: number }[] = [];
     const starCount = 200;
 
     const initStars = (width: number, height: number) => {
@@ -22,22 +23,37 @@ const CosmicHeroBackground: React.FC = () => {
           size: Math.random() * 1.5,
           baseOpacity: Math.random() * 0.6 + 0.1,
           phase: Math.random() * Math.PI * 2,
+          speed: Math.random() * 0.35 + 0.05,
         });
       }
     };
 
+    const startTime = performance.now();
+    const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+
     const animate = (time: number) => {
+      const t = time - startTime;
       const width = canvas.width / (window.devicePixelRatio || 1);
       const height = canvas.height / (window.devicePixelRatio || 1);
 
       ctx.clearRect(0, 0, width, height);
 
+      // Slow cinematic star fade-in (calm, no abrupt motion)
+      const starsFade = clamp01((t - 900) / 2200);
+
       stars.forEach(star => {
-        const opacity = star.baseOpacity + Math.sin(time * 0.001 + star.phase) * 0.2;
+        // Slow, cinematic drift (parallax-like) with wrap-around.
+        // Keep motion extremely subtle to preserve the calm mood.
+        star.x += star.speed * 0.18;
+        star.y += star.speed * 0.05;
+        if (star.x > width + 2) star.x = -2;
+        if (star.y > height * 0.82) star.y = -2;
+
+        const opacity = (star.baseOpacity + Math.sin(time * 0.001 + star.phase) * 0.2) * starsFade;
 
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(226, 232, 240, ${Math.max(0.1, opacity)})`;
+        ctx.fillStyle = `rgba(226, 232, 240, ${Math.max(0, opacity)})`;
         ctx.fill();
       });
 
@@ -105,16 +121,49 @@ const CosmicHeroBackground: React.FC = () => {
           alignItems: 'center',
           justifyContent: 'space-between',
           padding: '10px 8px',
-          animation: 'fadeInDown 0.8s ease-out forwards',
+          animation: 'fadeInDown 0.5s ease-out forwards',
         }}
       >
         {/* Logo - left aligned */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <img
             src="images/icon.png"
             alt="Mohak Devkota Logo"
             style={{ width: '44px', height: '44px', borderRadius: '10px', objectFit: 'contain' }}
           />
+
+          {/* Mobile-only hamburger (enabled via CSS @media) */}
+          <button
+            className="mobile-menu-toggle"
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMobileMenuOpen((v) => !v)}
+            style={{
+              background: 'transparent',
+              border: 'none',
+              color: '#E2E8F0',
+              width: '44px',
+              height: '44px',
+              borderRadius: '12px',
+              display: 'none',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s ease',
+            }}
+          >
+            {mobileMenuOpen ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 6L6 18" />
+                <path d="M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M4 6h16" />
+                <path d="M4 12h16" />
+                <path d="M4 18h16" />
+              </svg>
+            )}
+          </button>
         </div>
 
         {/* Center Nav Links */}
@@ -161,7 +210,7 @@ const CosmicHeroBackground: React.FC = () => {
         </div>
 
         {/* Contact CTA Button - right aligned */}
-        <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+        <div className="desktop-contact-cta" style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
           <a
             href="#contact"
             style={{
@@ -198,6 +247,77 @@ const CosmicHeroBackground: React.FC = () => {
         </div>
       </nav>
 
+      {/* Mobile menu panel (mobile-only via CSS) */}
+      <div
+        className="mobile-menu-panel"
+        style={{
+          position: 'absolute',
+          top: '84px',
+          left: '16px',
+          right: '16px',
+          zIndex: 55,
+          opacity: mobileMenuOpen ? 1 : 0,
+          transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(-8px)',
+          pointerEvents: mobileMenuOpen ? 'auto' : 'none',
+          transition: 'opacity 180ms ease, transform 220ms ease',
+        }}
+      >
+        <div
+          style={{
+            borderRadius: '18px',
+            padding: '14px',
+            backgroundColor: 'rgba(15, 23, 42, 0.72)',
+            border: '1px solid rgba(148, 163, 184, 0.16)',
+            backdropFilter: 'blur(18px)',
+            boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55)',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '6px 6px 10px 6px' }}>
+            {['Home', 'Projects', 'About'].map((item) => (
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  padding: '12px 12px',
+                  borderRadius: '14px',
+                  fontSize: '16px',
+                  fontWeight: 500,
+                  color: '#E2E8F0',
+                  textDecoration: 'none',
+                  backgroundColor: 'transparent',
+                  transition: 'background-color 0.2s ease',
+                }}
+              >
+                {item}
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="#contact"
+            onClick={() => setMobileMenuOpen(false)}
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              padding: '14px 16px',
+              borderRadius: '16px',
+              backgroundColor: '#0B1220',
+              color: '#F8FAFC',
+              fontSize: '15px',
+              fontWeight: 600,
+              textDecoration: 'none',
+              boxShadow: '0 12px 38px rgba(0, 0, 0, 0.55)',
+              border: '1px solid rgba(148, 163, 184, 0.18)',
+            }}
+          >
+            Contact
+          </a>
+        </div>
+      </div>
+
       {/* Atmospheric Central Glow (Vertical Column/Pillar) */}
       <div
         style={{
@@ -207,10 +327,13 @@ const CosmicHeroBackground: React.FC = () => {
           transform: 'translateX(-50%)',
           width: '46vw',
           height: '90vh',
-          background: 'radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.14) 0%, rgba(30, 64, 175, 0.06) 48%, transparent 88%)',
+          background:
+            'radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 28%, rgba(30, 64, 175, 0.035) 52%, transparent 90%)',
           pointerEvents: 'none',
           filter: 'blur(140px)',
           zIndex: 1,
+          opacity: 0,
+          animation: 'horizonGlowIn 2.2s ease-out 0.25s forwards, glowDrift 12s ease-in-out 1.2s infinite',
         }}
       />
 
@@ -221,12 +344,34 @@ const CosmicHeroBackground: React.FC = () => {
           bottom: '29vh',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '28vw',
-          height: '8vh',
-          background: 'radial-gradient(ellipse at center, rgba(226, 232, 240, 0.22) 0%, rgba(191, 219, 254, 0.08) 35%, transparent 78%)',
+          width: '34vw',
+          height: '10vh',
+          background:
+            'radial-gradient(ellipse at center, rgba(226, 232, 240, 0.16) 0%, rgba(191, 219, 254, 0.10) 24%, rgba(59, 130, 246, 0.05) 48%, transparent 78%)',
           pointerEvents: 'none',
-          filter: 'blur(28px)',
+          filter: 'blur(34px)',
           zIndex: 5,
+          opacity: 0,
+          animation: 'horizonGlowIn 2.0s ease-out 0.35s forwards, glowDrift 11s ease-in-out 1.2s infinite',
+        }}
+      />
+
+      {/* Clean "emission" bloom above the arc center */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: '27vh',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '18vw',
+          height: '6vh',
+          background:
+            'radial-gradient(ellipse at center, rgba(248, 250, 252, 0.16) 0%, rgba(226, 232, 240, 0.10) 30%, rgba(191, 219, 254, 0.06) 55%, transparent 78%)',
+          pointerEvents: 'none',
+          filter: 'blur(22px)',
+          zIndex: 6,
+          opacity: 0,
+          animation: 'horizonGlowIn 1.8s ease-out 0.4s forwards, glowBreathe 7.5s ease-in-out 1.4s infinite',
         }}
       />
 
@@ -269,7 +414,7 @@ const CosmicHeroBackground: React.FC = () => {
               gap: '8px',
               marginBottom: '22px',
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-              animation: 'fadeInDown 0.8s ease-out forwards',
+              animation: 'fadeInDown 0.5s ease-out forwards',
             }}
           >
             <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
@@ -290,7 +435,7 @@ const CosmicHeroBackground: React.FC = () => {
               background: 'linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              animation: 'fadeInUp 1s ease-out 0.2s forwards',
+              animation: 'fadeInUp 0.7s ease-out 0.12s forwards',
               opacity: 0,
             }}
           >
@@ -306,7 +451,7 @@ const CosmicHeroBackground: React.FC = () => {
               margin: '0 0 30px 0',
               fontWeight: 400,
               lineHeight: 1.6,
-              animation: 'fadeInUp 1s ease-out 0.4s forwards',
+              animation: 'fadeInUp 0.7s ease-out 0.22s forwards',
               opacity: 0,
             }}
           >
@@ -321,7 +466,7 @@ const CosmicHeroBackground: React.FC = () => {
               justifyContent: 'center',
               alignItems: 'center',
               gap: '14px',
-              animation: 'fadeInUp 1s ease-out 0.6s forwards',
+              animation: 'fadeInUp 0.7s ease-out 0.32s forwards',
               opacity: 0,
             }}
           >
@@ -445,6 +590,7 @@ const CosmicHeroBackground: React.FC = () => {
             stroke="url(#horizonRim)"
             strokeWidth="4"
             filter="url(#glow)"
+            style={{ opacity: 0, animation: 'rimIn 2.1s ease-out 0.35s forwards' }}
           />
         </svg>
       </div>
@@ -466,6 +612,22 @@ const CosmicHeroBackground: React.FC = () => {
           0%, 100% { opacity: 0.6; }
           50% { opacity: 0.9; }
         }
+        @keyframes horizonGlowIn {
+          0% { opacity: 0; transform: translateX(-50%) translateY(16px); }
+          100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes rimIn {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
+        }
+        @keyframes glowDrift {
+          0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+          50% { transform: translateX(-50%) translateY(-6px) scale(1.015); }
+        }
+        @keyframes glowBreathe {
+          0%, 100% { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+          50% { transform: translateX(-50%) translateY(-6px) scale(1.05); opacity: 0.95; }
+        }
         @keyframes fadeInDown {
           from { opacity: 0; transform: translateY(-30px); }
           to { opacity: 1; transform: translateY(0); }
@@ -474,25 +636,45 @@ const CosmicHeroBackground: React.FC = () => {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        .mobile-menu-panel {
+          display: none;
+        }
         @media (max-width: 640px) {
           .hero-buttons {
             flex-direction: column !important;
             align-items: center !important;
             width: 100% !important;
-            max-width: 280px !important;
+            max-width: 340px !important;
           }
           .hero-buttons button {
             width: 100% !important;
             justify-content: center !important;
+            padding: 14px 18px !important;
+            border-radius: 16px !important;
+            font-size: 15px !important;
           }
           .nav-links {
             display: none !important;
           }
           .cosmic-navbar {
-            padding: 10px 16px !important;
+            padding: 10px 14px !important;
             top: 12px !important;
-            left: 12px !important;
-            right: 12px !important;
+            left: 16px !important;
+            right: 16px !important;
+            border-radius: 18px !important;
+            background-color: rgba(15, 23, 42, 0.72) !important;
+            border: 1px solid rgba(148, 163, 184, 0.16) !important;
+            backdrop-filter: blur(18px) !important;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55) !important;
+          }
+          .desktop-contact-cta {
+            display: none !important;
+          }
+          .mobile-menu-toggle {
+            display: flex !important;
+          }
+          .mobile-menu-panel {
+            display: block !important;
           }
         }
       `}</style>
