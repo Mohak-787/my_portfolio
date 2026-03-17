@@ -34,9 +34,9 @@ function App() {
               permanent
             />
           </div>
-          
+
           <div style={{ position: "relative", zIndex: 10, width: "100%", padding: "0 24px" }}>
-            <LiquidGlassCard 
+            <LiquidGlassCard
               title="About me"
               description="I am a Computer Science student passionate about software development, AI/ML, and FinTech innovation. I focus on building scalable web applications and backend solutions that solve practical problems. I am motivated by continuous learning, professional growth, and collaboration with experts across both technology and business sectors."
               imageSrc="images/icon.png"
