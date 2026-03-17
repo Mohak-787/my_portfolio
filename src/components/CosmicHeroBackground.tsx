@@ -1,21 +1,48 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef } from "react"
 
-const CosmicHeroBackground: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const requestRef = useRef<number>();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+type CosmicHeroBackgroundProps = {
+  children?: React.ReactNode
+  className?: string
+  style?: React.CSSProperties
+}
+
+const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
+  children,
+  className,
+  style,
+}) => {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const requestRef = useRef<number>()
+
+  const gradients = useMemo(
+    () => `
+      radial-gradient(ellipse at 50% 78%, rgba(59, 130, 246, 0.10) 0%, rgba(15, 23, 42, 0.18) 38%, transparent 72%),
+      radial-gradient(ellipse at 50% 85%, rgba(148, 163, 184, 0.06) 0%, transparent 65%)
+    `,
+    [],
+  )
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+    const container = containerRef.current
+    const canvas = canvasRef.current
+    if (!container || !canvas) return
 
-    let stars: { x: number; y: number; size: number; baseOpacity: number; phase: number; speed: number }[] = [];
-    const starCount = 200;
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    let stars: {
+      x: number
+      y: number
+      size: number
+      baseOpacity: number
+      phase: number
+      speed: number
+    }[] = []
+    const starCount = 200
 
     const initStars = (width: number, height: number) => {
-      stars = [];
+      stars = []
       for (let i = 0; i < starCount; i++) {
         stars.push({
           x: Math.random() * width,
@@ -24,299 +51,97 @@ const CosmicHeroBackground: React.FC = () => {
           baseOpacity: Math.random() * 0.6 + 0.1,
           phase: Math.random() * Math.PI * 2,
           speed: Math.random() * 0.35 + 0.05,
-        });
+        })
       }
-    };
+    }
 
-    const startTime = performance.now();
-    const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
+    const startTime = performance.now()
+    const clamp01 = (v: number) => Math.min(1, Math.max(0, v))
 
     const animate = (time: number) => {
-      const t = time - startTime;
-      const width = canvas.width / (window.devicePixelRatio || 1);
-      const height = canvas.height / (window.devicePixelRatio || 1);
+      const t = time - startTime
+      const width = canvas.width / (window.devicePixelRatio || 1)
+      const height = canvas.height / (window.devicePixelRatio || 1)
 
-      ctx.clearRect(0, 0, width, height);
+      ctx.clearRect(0, 0, width, height)
 
       // Slow cinematic star fade-in (calm, no abrupt motion)
-      const starsFade = clamp01((t - 900) / 2200);
+      const starsFade = clamp01((t - 900) / 2200)
 
       stars.forEach(star => {
         // Slow, cinematic drift (parallax-like) with wrap-around.
         // Keep motion extremely subtle to preserve the calm mood.
-        star.x += star.speed * 0.18;
-        star.y += star.speed * 0.05;
-        if (star.x > width + 2) star.x = -2;
-        if (star.y > height * 0.82) star.y = -2;
+        star.x += star.speed * 0.18
+        star.y += star.speed * 0.05
+        if (star.x > width + 2) star.x = -2
+        if (star.y > height * 0.82) star.y = -2
 
-        const opacity = (star.baseOpacity + Math.sin(time * 0.001 + star.phase) * 0.2) * starsFade;
+        const opacity =
+          (star.baseOpacity + Math.sin(time * 0.001 + star.phase) * 0.2) *
+          starsFade
 
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(226, 232, 240, ${Math.max(0, opacity)})`;
-        ctx.fill();
-      });
+        ctx.beginPath()
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(226, 232, 240, ${Math.max(0, opacity)})`
+        ctx.fill()
+      })
 
-      requestRef.current = requestAnimationFrame(animate);
-    };
+      requestRef.current = requestAnimationFrame(animate)
+    }
 
     const handleResize = () => {
-      const dpr = window.devicePixelRatio || 1;
-      canvas.width = window.innerWidth * dpr;
-      canvas.height = window.innerHeight * dpr;
-      ctx.scale(dpr, dpr);
-      initStars(window.innerWidth, window.innerHeight);
-    };
+      const rect = container.getBoundingClientRect()
+      const dpr = window.devicePixelRatio || 1
 
-    window.addEventListener('resize', handleResize);
-    handleResize();
-    requestRef.current = requestAnimationFrame(animate);
+      // Reset transform before scaling (avoids accumulating scale on repeated resizes)
+      ctx.setTransform(1, 0, 0, 1, 0, 0)
+      canvas.width = Math.max(1, Math.floor(rect.width * dpr))
+      canvas.height = Math.max(1, Math.floor(rect.height * dpr))
+      ctx.scale(dpr, dpr)
+
+      initStars(rect.width, rect.height)
+    }
+
+    const ro = new ResizeObserver(() => handleResize())
+    ro.observe(container)
+    handleResize()
+    requestRef.current = requestAnimationFrame(animate)
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      if (requestRef.current) cancelAnimationFrame(requestRef.current);
-    };
+      ro.disconnect()
+      if (requestRef.current) cancelAnimationFrame(requestRef.current)
+    }
   }, []);
 
   return (
     <div
+      ref={containerRef}
+      className={className}
       style={{
-        width: '100vw',
-        height: '100vh',
-        backgroundColor: '#000000',
-        backgroundImage: `
-          radial-gradient(ellipse at 50% 78%, rgba(59, 130, 246, 0.10) 0%, rgba(15, 23, 42, 0.18) 38%, transparent 72%),
-          radial-gradient(ellipse at 50% 85%, rgba(148, 163, 184, 0.06) 0%, transparent 65%)
-        `,
-        overflow: 'hidden',
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
+        width: "100%",
+        minHeight: "100svh",
+        backgroundColor: "#000000",
+        backgroundImage: gradients,
+        overflow: "hidden",
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "flex-end",
+        ...style,
       }}
     >
       {/* Animated Starfield */}
       <canvas
         ref={canvasRef}
         style={{
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           left: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
         }}
       />
-
-      {/* Floating Navbar */}
-      <nav
-        className="cosmic-navbar"
-        style={{
-          position: 'absolute',
-          top: '16px',
-          left: '32px',
-          right: '32px',
-          zIndex: 50,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '10px 8px',
-          animation: 'fadeInDown 0.5s ease-out forwards',
-        }}
-      >
-        {/* Logo - left aligned */}
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <img
-            src="images/icon.png"
-            alt="Mohak Devkota Logo"
-            style={{ width: '44px', height: '44px', borderRadius: '10px', objectFit: 'contain' }}
-          />
-
-          {/* Mobile-only hamburger (enabled via CSS @media) */}
-          <button
-            className="mobile-menu-toggle"
-            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
-            onClick={() => setMobileMenuOpen((v) => !v)}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              color: '#E2E8F0',
-              width: '44px',
-              height: '44px',
-              borderRadius: '12px',
-              display: 'none',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer',
-              transition: 'background-color 0.2s ease',
-            }}
-          >
-            {mobileMenuOpen ? (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 6L6 18" />
-                <path d="M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 6h16" />
-                <path d="M4 12h16" />
-                <path d="M4 18h16" />
-              </svg>
-            )}
-          </button>
-        </div>
-
-        {/* Center Nav Links */}
-        <div
-          className="nav-links"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '4px',
-            backgroundColor: 'rgba(15, 23, 42, 0.6)',
-            borderRadius: '9999px',
-            padding: '4px 6px',
-            border: '1px solid rgba(148, 163, 184, 0.15)',
-            backdropFilter: 'blur(16px)',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
-          }}
-        >
-          {['Home', 'Projects', 'About'].map((item) => (
-            <a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              style={{
-                padding: '10px 32px',
-                borderRadius: '9999px',
-                fontSize: '14px',
-                fontWeight: 500,
-                color: '#CBD5E1',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-                cursor: 'pointer',
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.color = '#F8FAFC';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#CBD5E1';
-              }}
-            >
-              {item}
-            </a>
-          ))}
-        </div>
-
-        {/* Contact CTA Button - right aligned */}
-        <div className="desktop-contact-cta" style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-          <a
-            href="#contact"
-            style={{
-              padding: '10px 24px',
-              borderRadius: '9999px',
-              backgroundColor: '#3B82F6',
-              color: '#F8FAFC',
-              fontSize: '14px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}
-            onMouseOver={(e) => {
-              e.currentTarget.style.backgroundColor = '#2563EB';
-              e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.45)';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseOut={(e) => {
-              e.currentTarget.style.backgroundColor = '#3B82F6';
-              e.currentTarget.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
-          >
-            Contact
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </a>
-        </div>
-      </nav>
-
-      {/* Mobile menu panel (mobile-only via CSS) */}
-      <div
-        className="mobile-menu-panel"
-        style={{
-          position: 'absolute',
-          top: '84px',
-          left: '16px',
-          right: '16px',
-          zIndex: 55,
-          opacity: mobileMenuOpen ? 1 : 0,
-          transform: mobileMenuOpen ? 'translateY(0)' : 'translateY(-8px)',
-          pointerEvents: mobileMenuOpen ? 'auto' : 'none',
-          transition: 'opacity 180ms ease, transform 220ms ease',
-        }}
-      >
-        <div
-          style={{
-            borderRadius: '18px',
-            padding: '14px',
-            backgroundColor: 'rgba(15, 23, 42, 0.72)',
-            border: '1px solid rgba(148, 163, 184, 0.16)',
-            backdropFilter: 'blur(18px)',
-            boxShadow: '0 18px 60px rgba(0, 0, 0, 0.55)',
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '6px 6px 10px 6px' }}>
-            {['Home', 'Projects', 'About'].map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  padding: '12px 12px',
-                  borderRadius: '14px',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  color: '#E2E8F0',
-                  textDecoration: 'none',
-                  backgroundColor: 'transparent',
-                  transition: 'background-color 0.2s ease',
-                }}
-              >
-                {item}
-              </a>
-            ))}
-          </div>
-
-          <a
-            href="#contact"
-            onClick={() => setMobileMenuOpen(false)}
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '100%',
-              padding: '14px 16px',
-              borderRadius: '16px',
-              backgroundColor: '#0B1220',
-              color: '#F8FAFC',
-              fontSize: '15px',
-              fontWeight: 600,
-              textDecoration: 'none',
-              boxShadow: '0 12px 38px rgba(0, 0, 0, 0.55)',
-              border: '1px solid rgba(148, 163, 184, 0.18)',
-            }}
-          >
-            Contact
-          </a>
-        </div>
-      </div>
 
       {/* Atmospheric Central Glow (Vertical Column/Pillar) */}
       <div
@@ -375,169 +200,21 @@ const CosmicHeroBackground: React.FC = () => {
         }}
       />
 
-      {/* Detailed Hero Content Overlay */}
+      {/* Hero content slot */}
       <div
         style={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
           zIndex: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-          padding: '0 clamp(16px, 4vw, 32px)',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          textAlign: "center",
+          padding: "0 clamp(16px, 4vw, 32px)",
         }}
       >
-        <div
-          style={{
-            maxWidth: '1100px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            transform: 'translateY(-6vh)',
-          }}
-        >
-          {/* Pill Badge */}
-          <div
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              color: '#0f172a',
-              padding: '6px 18px',
-              borderRadius: '9999px',
-              fontSize: '13px',
-              fontWeight: 600,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              marginBottom: '22px',
-              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-              animation: 'fadeInDown 0.5s ease-out forwards',
-            }}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-            </svg>
-            Powering Apps Behind the Scenes
-          </div>
-
-          {/* Main Heading */}
-          <h1
-            style={{
-              fontSize: 'clamp(56px, 5.8vw, 72px)',
-              fontWeight: 800,
-              lineHeight: 1.1,
-              letterSpacing: '0.04em',
-              textTransform: 'uppercase',
-              margin: '0 0 18px 0',
-              background: 'linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              animation: 'fadeInUp 0.7s ease-out 0.12s forwards',
-              opacity: 0,
-            }}
-          >
-            Mohak Devkota
-          </h1>
-
-          {/* Subheading */}
-          <p
-            style={{
-              fontSize: '19px',
-              color: '#94A3B8',
-              maxWidth: '600px',
-              margin: '0 0 30px 0',
-              fontWeight: 400,
-              lineHeight: 1.6,
-              animation: 'fadeInUp 0.7s ease-out 0.22s forwards',
-              opacity: 0,
-            }}
-          >
-            Backend Developer
-          </p>
-
-          {/* Action Buttons */}
-          <div
-            className="hero-buttons"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '14px',
-              animation: 'fadeInUp 0.7s ease-out 0.32s forwards',
-              opacity: 0,
-            }}
-          >
-            <button
-              style={{
-                backgroundColor: '#3B82F6',
-                color: '#F8FAFC',
-                padding: '12px 20px',
-                borderRadius: '11px',
-                border: '1px solid rgba(59, 130, 246, 0.45)',
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 15px rgba(59, 130, 246, 0.3)',
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = '#2563EB';
-                e.currentTarget.style.boxShadow = '0 8px 25px rgba(59, 130, 246, 0.45)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = '#3B82F6';
-                e.currentTarget.style.boxShadow = '0 4px 15px rgba(59, 130, 246, 0.3)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              Download CV
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M7 13L12 18L17 13M12 18V4" />
-                <path d="M20 20H4" />
-              </svg>
-            </button>
-
-            <button
-              style={{
-                backgroundColor: 'rgba(241, 245, 249, 0.95)',
-                color: '#0F172A',
-                padding: '12px 20px',
-                borderRadius: '11px',
-                border: '1px solid rgba(148, 163, 184, 0.2)',
-                fontSize: '14px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-              }}
-              onMouseOver={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.12)';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseOut={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(241, 245, 249, 0.95)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.08)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              View source
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        {children}
       </div>
 
       {/* The Refined Horizon Arc (Moderate Curve) */}
@@ -636,50 +313,9 @@ const CosmicHeroBackground: React.FC = () => {
           from { opacity: 0; transform: translateY(30px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        .mobile-menu-panel {
-          display: none;
-        }
-        @media (max-width: 640px) {
-          .hero-buttons {
-            flex-direction: column !important;
-            align-items: center !important;
-            width: 100% !important;
-            max-width: 340px !important;
-          }
-          .hero-buttons button {
-            width: 100% !important;
-            justify-content: center !important;
-            padding: 14px 18px !important;
-            border-radius: 16px !important;
-            font-size: 15px !important;
-          }
-          .nav-links {
-            display: none !important;
-          }
-          .cosmic-navbar {
-            padding: 10px 14px !important;
-            top: 12px !important;
-            left: 16px !important;
-            right: 16px !important;
-            border-radius: 18px !important;
-            background-color: rgba(15, 23, 42, 0.72) !important;
-            border: 1px solid rgba(148, 163, 184, 0.16) !important;
-            backdrop-filter: blur(18px) !important;
-            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.55) !important;
-          }
-          .desktop-contact-cta {
-            display: none !important;
-          }
-          .mobile-menu-toggle {
-            display: flex !important;
-          }
-          .mobile-menu-panel {
-            display: block !important;
-          }
-        }
       `}</style>
     </div>
-  );
-};
+  )
+}
 
 export default CosmicHeroBackground;

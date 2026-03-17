@@ -1,12 +1,11 @@
-import { Home, User, Briefcase } from "lucide-react"
 import { NavBar } from "@/components/ui/tubelight-navbar"
 
 export function NavBarDemo() {
   const navItems = [
-    { name: "Home", url: "#home", icon: Home },
-    { name: "About Me", url: "#about", icon: User },
-    { name: "Projects", url: "#projects", icon: Briefcase },
+    { name: "Home", url: "/" },
+    { name: "About Me", url: "#about" },
+    { name: "Projects", url: "#projects" },
   ]
 
-  return <NavBar items={navItems} />
+  return <NavBar items={navItems} logoSrc="images/icon.png" ctaLabel="Contact" ctaHref="#contact" />
 }

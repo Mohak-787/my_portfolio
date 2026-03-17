@@ -21,6 +21,22 @@ body {
   font-family: 'Outfit', 'Montserrat', 'Inter', sans-serif;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
-  overflow: hidden;
-  /* No scrolling for full screen space scene */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+@media (max-width: 640px) {
+  .hero-buttons {
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    max-width: 340px !important;
+  }
+  .hero-buttons button {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 14px 18px !important;
+    border-radius: 16px !important;
+    font-size: 15px !important;
+  }
 }
