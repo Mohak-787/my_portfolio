@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,7 +7,7 @@
 }
 
 body {
-  font-family: 'Montserrat', 'Inter', sans-serif;
+  font-family: 'Outfit', 'Montserrat', 'Inter', sans-serif;
   background-color: #000;
   color: #fff;
   overflow: hidden; /* No scrolling for full screen space scene */
