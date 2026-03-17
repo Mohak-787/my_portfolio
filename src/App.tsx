@@ -1,6 +1,9 @@
 import "./index.css"
 import HeroSection from "./components/HeroSection"
 import { PixelCanvas } from "./components/ui/pixel-canvas"
+import { LiquidGlassCard } from "./components/ui/liquid-glass-card"
+
+import ProjectCardStream from "./components/ProjectCardStream"
 
 function App() {
   return (
@@ -13,54 +16,58 @@ function App() {
         <section
           id="about"
           style={{
-            padding: 0,
+            padding: "120px 0",
             position: "relative",
             overflow: "hidden",
             backgroundColor: "#000000",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <PixelCanvas
-            gap={10}
-            speed={25}
-            colors={["#e0f2fe", "#7dd3fc", "#0ea5e9"]}
-            variant="default"
-          />
-          <div
-            aria-hidden
-            style={{
-              position: "relative",
-              zIndex: 1,
-              height: "clamp(180px, 22vw, 320px)",
-            }}
-          />
+          <div style={{ position: "absolute", inset: 0 }}>
+            <PixelCanvas
+              gap={8}
+              speed={25}
+              colors={["#3B82F6", "#60A5FA", "#93C5FD", "#2563EB", "#1D4ED8", "#1E3A8A"]}
+              variant="default"
+              permanent
+            />
+          </div>
+          
+          <div style={{ position: "relative", zIndex: 10, width: "100%", padding: "0 24px" }}>
+            <LiquidGlassCard 
+              title="About me"
+              description="I am a Computer Science student passionate about software development, AI/ML, and FinTech innovation. I focus on building scalable web applications and backend solutions that solve practical problems. I am motivated by continuous learning, professional growth, and collaboration with experts across both technology and business sectors."
+              imageSrc="images/icon.png"
+            />
+          </div>
         </section>
 
         <section
           id="projects"
           style={{
             minHeight: "100svh",
-            padding: "96px clamp(16px, 5vw, 64px)",
+            padding: "96px 0",
             backgroundColor: "#000000",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
+          <h2 style={{
+            fontSize: "clamp(32px, 5vw, 48px)",
+            fontWeight: 800,
+            marginBottom: "48px",
+            color: "#FFFFFF",
+            textAlign: "center"
+          }}>
+            Featured Projects
+          </h2>
+          <ProjectCardStream />
         </section>
 
-        <section
-          id="contact"
-          style={{
-            minHeight: "75svh",
-            padding: "96px clamp(16px, 5vw, 64px)",
-            background:
-              "radial-gradient(1000px 420px at 50% 0%, rgba(255,255,255,0.08), transparent 55%), linear-gradient(to bottom, #020207 0%, #000000 100%)",
-          }}
-        >
-          <h2 style={{ fontSize: "32px", fontWeight: 700, marginBottom: "12px" }}>
-            Contact
-          </h2>
-          <p style={{ maxWidth: "70ch", color: "rgba(226,232,240,0.78)", lineHeight: 1.7 }}>
-            Hook your contact form or CTA here.
-          </p>
-        </section>
       </main>
     </>
   )

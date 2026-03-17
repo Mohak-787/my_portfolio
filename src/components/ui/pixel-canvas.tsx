@@ -139,9 +139,13 @@ class PixelCanvasElement extends HTMLElement {
   private _parent: Element | null = null
 
   private onMouseEnter = () => this.handleAnimation("appear")
-  private onMouseLeave = () => this.handleAnimation("disappear")
+  private onMouseLeave = () => {
+    if (!this.permanent) this.handleAnimation("disappear")
+  }
   private onFocus = () => this.handleAnimation("appear")
-  private onBlur = () => this.handleAnimation("disappear")
+  private onBlur = () => {
+    if (!this.permanent) this.handleAnimation("disappear")
+  }
 
   constructor() {
     super()
@@ -187,6 +191,14 @@ class PixelCanvasElement extends HTMLElement {
     return this.dataset.variant || "default"
   }
 
+  get autoStart() {
+    return this.hasAttribute("data-auto-start")
+  }
+
+  get permanent() {
+    return this.hasAttribute("data-permanent")
+  }
+
   connectedCallback() {
     if (this._initialized) return
     this._initialized = true
@@ -194,6 +206,10 @@ class PixelCanvasElement extends HTMLElement {
 
     requestAnimationFrame(() => {
       this.handleResize()
+
+      if (this.autoStart || this.permanent) {
+        this.handleAnimation("appear")
+      }
 
       const ro = new ResizeObserver(() => {
         requestAnimationFrame(() => this.handleResize())
@@ -330,6 +346,8 @@ export interface PixelCanvasProps
   colors?: string[]
   variant?: "default" | "icon"
   noFocus?: boolean
+  autoStart?: boolean
+  permanent?: boolean
 }
 
 declare global {
@@ -344,13 +362,15 @@ declare global {
         "data-colors"?: string
         "data-variant"?: "default" | "icon"
         "data-no-focus"?: ""
+        "data-auto-start"?: ""
+        "data-permanent"?: ""
       }
     }
   }
 }
 
 const PixelCanvas = React.forwardRef<HTMLElement, PixelCanvasProps>(
-  ({ gap, speed, colors, variant, noFocus, style, ...props }, ref) => {
+  ({ gap, speed, colors, variant, noFocus, autoStart, permanent, style, ...props }, ref) => {
     React.useEffect(() => {
       if (typeof window !== "undefined") {
         if (!customElements.get("pixel-canvas")) {
@@ -367,6 +387,8 @@ const PixelCanvas = React.forwardRef<HTMLElement, PixelCanvasProps>(
         data-colors={colors?.join(",")}
         data-variant={variant}
         {...(noFocus && { "data-no-focus": "" })}
+        {...(autoStart && { "data-auto-start": "" })}
+        {...(permanent && { "data-permanent": "" })}
         style={{
           position: "absolute",
           inset: 0,
