@@ -7,9 +7,7 @@ interface Project {
   id: number;
   title: string;
   image: string;
-  number: string;
-  holder: string;
-  expiry: string;
+  url: string;
 }
 
 // --- Constants ---
@@ -33,7 +31,7 @@ const generateCode = (width: number, height: number) => {
 // --- Sub-Components ---
 
 const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const [asciiContent, setAsciiContent] = useState("");
 
   useEffect(() => {
@@ -86,7 +84,10 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
   }, []);
 
   return (
-    <div
+    <a
+      href={project.url}
+      target="_blank"
+      rel="noopener noreferrer"
       ref={cardRef}
       className="card-wrapper"
       style={{
@@ -94,6 +95,15 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
         width: `${CARD_WIDTH}px`,
         height: '250px',
         flexShrink: 0,
+        display: 'block',
+        textDecoration: 'none',
+        transition: 'transform 0.3s ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'scale(1.02)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'scale(1)';
       }}
     >
       <div
@@ -118,17 +128,19 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            filter: 'brightness(1.1) contrast(1.1)',
+            filter: 'brightness(0.9) contrast(1.1)',
           }}
         />
         <div style={{
           position: 'absolute',
-          top: '20px',
-          right: '24px',
+          bottom: '24px',
+          left: '24px',
           color: 'white',
-          fontSize: '18px',
+          fontSize: '24px',
           fontWeight: 'bold',
-          textShadow: '0 2px 4px rgba(0,0,0,0.5)'
+          textShadow: '0 2px 8px rgba(0,0,0,0.8)',
+          letterSpacing: '0.05em',
+          textTransform: 'uppercase',
         }}>
           {project.title}
         </div>
@@ -170,7 +182,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           {asciiContent}
         </div>
       </div>
-    </div>
+    </a>
   );
 };
 
@@ -379,11 +391,30 @@ const ProjectCardStream: React.FC = () => {
   const direction = useRef(1);
 
   const projects: Project[] = useMemo(() => [
-    { id: 1, title: 'Quantum Engine', image: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800', number: '1234 5678 9000 0001', holder: 'ALEX RIVERA', expiry: '12/25' },
-    { id: 2, title: 'Neural Nexus', image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800', number: '1234 5678 9000 0002', holder: 'SAM CHEN', expiry: '06/26' },
-    { id: 3, title: 'Stellar Voyager', image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800', number: '1234 5678 9000 0003', holder: 'JORDAN LEE', expiry: '09/24' },
-    { id: 4, title: 'Cyber Pulse', image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800', number: '1234 5678 9000 0004', holder: 'TAYLOR REED', expiry: '03/27' },
-    { id: 5, title: 'Data Prism', image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800', number: '1234 5678 9000 0005', holder: 'CASEY PARK', expiry: '11/25' },
+    { 
+      id: 1, 
+      title: 'AUTH SYSTEM', 
+      image: '/images/projects/auth-system.png', 
+      url: 'https://github.com/Mohak-787/auth-system' 
+    },
+    { 
+      id: 2, 
+      title: 'MOVEX BACKEND', 
+      image: '/images/projects/movex-backend.png', 
+      url: 'https://github.com/Mohak-787/MoveX-Backend' 
+    },
+    { 
+      id: 3, 
+      title: 'BANKLEDGER', 
+      image: '/images/projects/bankledger-backend.png', 
+      url: 'https://github.com/Mohak-787/BankLedger-Backend' 
+    },
+    { 
+      id: 4, 
+      title: 'CHATIEE', 
+      image: '/images/projects/chatiee.png', 
+      url: 'https://github.com/Mohak-787/chatiee' 
+    },
   ], []);
 
   const displayProjects = useMemo(() => [...projects, ...projects, ...projects], [projects]);
