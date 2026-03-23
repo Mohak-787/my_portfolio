@@ -28,7 +28,7 @@ function App() {
         >
           <div style={{ position: "absolute", inset: 0 }}>
             <PixelCanvas
-              gap={8}
+              gap={12}
               speed={25}
               colors={["#3B82F6", "#60A5FA", "#93C5FD", "#2563EB", "#1D4ED8", "#1E3A8A"]}
               variant="default"

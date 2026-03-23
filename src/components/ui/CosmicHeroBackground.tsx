@@ -39,14 +39,14 @@ const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
       phase: number
       speed: number
     }[] = []
-    const starCount = 200
+    const starCount = 120
 
     const initStars = (width: number, height: number) => {
       stars = []
       for (let i = 0; i < starCount; i++) {
         stars.push({
           x: Math.random() * width,
-          y: Math.random() * (height * 0.8), // Keep stars mostly in the upper 80%
+          y: Math.random() * (height * 0.8),
           size: Math.random() * 1.5,
           baseOpacity: Math.random() * 0.6 + 0.1,
           phase: Math.random() * Math.PI * 2,
@@ -65,12 +65,10 @@ const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
 
       ctx.clearRect(0, 0, width, height)
 
-      // Slow cinematic star fade-in (calm, no abrupt motion)
       const starsFade = clamp01((t - 900) / 2200)
 
+      ctx.fillStyle = "#e2e8f0";
       stars.forEach(star => {
-        // Slow, cinematic drift (parallax-like) with wrap-around.
-        // Keep motion extremely subtle to preserve the calm mood.
         star.x += star.speed * 0.18
         star.y += star.speed * 0.05
         if (star.x > width + 2) star.x = -2
@@ -80,11 +78,10 @@ const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
           (star.baseOpacity + Math.sin(time * 0.001 + star.phase) * 0.2) *
           starsFade
 
-        ctx.beginPath()
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(226, 232, 240, ${Math.max(0, opacity)})`
-        ctx.fill()
+        ctx.globalAlpha = Math.max(0, opacity);
+        ctx.fillRect(star.x - star.size / 2, star.y - star.size / 2, star.size, star.size)
       })
+      ctx.globalAlpha = 1.0;
 
       requestRef.current = requestAnimationFrame(animate)
     }
@@ -93,7 +90,6 @@ const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
       const rect = container.getBoundingClientRect()
       const dpr = window.devicePixelRatio || 1
 
-      // Reset transform before scaling (avoids accumulating scale on repeated resizes)
       ctx.setTransform(1, 0, 0, 1, 0, 0)
       canvas.width = Math.max(1, Math.floor(rect.width * dpr))
       canvas.height = Math.max(1, Math.floor(rect.height * dpr))
@@ -153,9 +149,9 @@ const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
           width: '46vw',
           height: '90vh',
           background:
-            'radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.12) 0%, rgba(59, 130, 246, 0.06) 28%, rgba(30, 64, 175, 0.035) 52%, transparent 90%)',
+            'radial-gradient(ellipse at bottom, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0.04) 28%, transparent 90%)',
           pointerEvents: 'none',
-          filter: 'blur(140px)',
+          filter: 'blur(80px)', // Reduced from 140px
           zIndex: 1,
           opacity: 0,
           animation: 'horizonGlowIn 2.2s ease-out 0.25s forwards, glowDrift 12s ease-in-out 1.2s infinite',
@@ -172,9 +168,9 @@ const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
           width: '34vw',
           height: '10vh',
           background:
-            'radial-gradient(ellipse at center, rgba(226, 232, 240, 0.16) 0%, rgba(191, 219, 254, 0.10) 24%, rgba(59, 130, 246, 0.05) 48%, transparent 78%)',
+            'radial-gradient(ellipse at center, rgba(226, 232, 240, 0.12) 0%, rgba(59, 130, 246, 0.04) 48%, transparent 78%)',
           pointerEvents: 'none',
-          filter: 'blur(34px)',
+          filter: 'blur(24px)', // Reduced from 34px
           zIndex: 5,
           opacity: 0,
           animation: 'horizonGlowIn 2.0s ease-out 0.35s forwards, glowDrift 11s ease-in-out 1.2s infinite',
@@ -191,9 +187,9 @@ const CosmicHeroBackground: React.FC<CosmicHeroBackgroundProps> = ({
           width: '18vw',
           height: '6vh',
           background:
-            'radial-gradient(ellipse at center, rgba(248, 250, 252, 0.16) 0%, rgba(226, 232, 240, 0.10) 30%, rgba(191, 219, 254, 0.06) 55%, transparent 78%)',
+            'radial-gradient(ellipse at center, rgba(248, 250, 252, 0.12) 0%, rgba(226, 232, 240, 0.08) 30%, transparent 78%)',
           pointerEvents: 'none',
-          filter: 'blur(22px)',
+          filter: 'blur(16px)', // Reduced from 22px
           zIndex: 6,
           opacity: 0,
           animation: 'horizonGlowIn 1.8s ease-out 0.4s forwards, glowBreathe 7.5s ease-in-out 1.4s infinite',

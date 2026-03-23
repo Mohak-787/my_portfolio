@@ -14,7 +14,7 @@ interface Project {
 
 // --- Constants ---
 const SCAN_WIDTH = 8;
-const PARTICLE_COUNT = 400;
+const PARTICLE_COUNT = 150;
 const CARD_WIDTH = 400;
 const CARD_GAP = 60;
 const CODE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789(){}[]<>;:,._-+=!@#$%^&*|\\/\"'`~?";
@@ -342,7 +342,7 @@ const ScannerAura: React.FC = () => {
 
     let rafId: number;
     const particles: any[] = [];
-    const maxParticles = 150; // Reduced count
+    const maxParticles = 80; // Further reduced for smoothness
 
     const createParticle = () => ({
       x: canvas.width / 2 + (Math.random() - 0.5) * 4,
