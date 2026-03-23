@@ -59,8 +59,13 @@ function App() {
           <h2 style={{
             fontSize: "clamp(32px, 5vw, 48px)",
             fontWeight: 800,
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
             marginBottom: "48px",
-            color: "#FFFFFF",
+            fontFamily: 'Outfit, sans-serif',
+            background: "linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
             textAlign: "center"
           }}>
             Featured Projects

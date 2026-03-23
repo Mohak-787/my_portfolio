@@ -105,8 +105,10 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ title, descrip
               fontWeight: 800,
               color: "#FFFFFF",
               marginBottom: "20px",
-              letterSpacing: "-0.03em",
-              background: "linear-gradient(to bottom, #FFFFFF, #94A3B8)",
+              letterSpacing: "0.02em",
+              textTransform: "uppercase",
+              fontFamily: 'Outfit, sans-serif',
+              background: "linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
             }}
@@ -116,7 +118,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ title, descrip
           <p
             style={{
               fontSize: "clamp(16px, 2.2vw, 19px)",
-              color: "rgba(226, 232, 240, 0.85)",
+              color: "#94A3B8",
               lineHeight: 1.7,
               fontWeight: 400,
               textAlign: "justify",

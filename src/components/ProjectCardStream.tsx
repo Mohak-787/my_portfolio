@@ -8,6 +8,8 @@ interface Project {
   title: string;
   image: string;
   url: string;
+  description: string;
+  isFeatured?: boolean;
 }
 
 // --- Constants ---
@@ -97,15 +99,17 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
         flexShrink: 0,
         display: 'block',
         textDecoration: 'none',
-        transition: 'transform 0.3s ease',
+        transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+        cursor: 'pointer',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'scale(1.02)';
+        e.currentTarget.style.transform = 'translateY(-5px) scale(1.02)';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.transform = 'scale(1)';
+        e.currentTarget.style.transform = 'translateY(0) scale(1)';
       }}
     >
+      {/* Normal Card (Design View) */}
       <div
         className="card card-normal"
         style={{
@@ -114,38 +118,103 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           left: 0,
           width: '100%',
           height: '100%',
-          borderRadius: '15px',
+          borderRadius: '20px',
           overflow: 'hidden',
           zIndex: 2,
           clipPath: 'inset(0 0 0 var(--clip-right, 0%))',
-          boxShadow: '0 15px 40px rgba(0, 0, 0, 0.4)',
+          backgroundColor: 'rgba(15, 23, 42, 0.7)',
+          backdropFilter: 'blur(16px)',
+          border: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',
         }}
       >
-        <img
-          src={project.image}
-          alt={project.title}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            filter: 'brightness(0.9) contrast(1.1)',
-          }}
-        />
-        <div style={{
-          position: 'absolute',
-          bottom: '24px',
-          left: '24px',
-          color: 'white',
-          fontSize: '24px',
-          fontWeight: 'bold',
-          textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
-        }}>
-          {project.title}
+        {/* Compact Image */}
+        <div style={{ position: 'relative', width: '100%', height: '90px', overflow: 'hidden' }}>
+          <img
+            src={project.image}
+            alt={project.title}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+          {project.isFeatured && (
+            <div style={{
+              position: 'absolute',
+              top: '8px',
+              left: '8px',
+              backgroundColor: 'rgba(255, 255, 255, 0.95)',
+              color: '#0f172a',
+              padding: '4px 12px',
+              borderRadius: '9999px',
+              fontSize: '11px',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+            }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              </svg>
+              Featured
+            </div>
+          )}
+        </div>
+
+        {/* Introduction */}
+        <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <h3 style={{
+            fontSize: '24px',
+            fontWeight: 800,
+            letterSpacing: '0.04em',
+            textTransform: 'uppercase',
+            margin: '0',
+            fontFamily: 'Outfit, sans-serif',
+            background: 'linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>
+            {project.title}
+          </h3>
+
+          <p style={{
+            color: '#94A3B8',
+            fontSize: '14px',
+            lineHeight: '1.6',
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            margin: '4px 0',
+          }}>
+            {project.description}
+          </p>
+
+          <div style={{
+            marginTop: 'auto',
+            backgroundColor: 'rgba(241, 245, 249, 0.95)',
+            color: '#0F172A',
+            padding: '10px',
+            borderRadius: '11px',
+            border: '1px solid rgba(148, 163, 184, 0.2)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            fontSize: '14px',
+            fontWeight: 600,
+            transition: 'all 0.3s ease',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.041-1.416-4.041-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+            </svg>
+            View Source
+          </div>
         </div>
       </div>
 
+      {/* ASCII Card */}
       <div
         className="card card-ascii"
         style={{
@@ -154,11 +223,12 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
           left: 0,
           width: '100%',
           height: '100%',
-          borderRadius: '15px',
+          borderRadius: '20px',
           overflow: 'hidden',
           zIndex: 1,
           backgroundColor: 'transparent',
           clipPath: 'inset(0 calc(100% - var(--clip-left, 0%)) 0 0)',
+          border: 'none',
         }}
       >
         <div
@@ -169,14 +239,14 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
             left: 0,
             width: '100%',
             height: '100%',
-            color: 'rgba(220, 210, 255, 0.6)',
-            fontFamily: '"Courier New", monospace',
-            fontSize: '11px',
-            lineHeight: '13px',
+            color: 'rgba(8, 145, 178, 0.6)',
+            fontFamily: 'monospace',
+            fontSize: '9px',
+            lineHeight: '11px',
             whiteSpace: 'pre',
             padding: '10px',
-            maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.2) 100%)',
+            maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 100%)',
+            WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 100%)',
           }}
         >
           {asciiContent}
@@ -337,7 +407,7 @@ const ScannerAura: React.FC = () => {
 
       const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
       gradient.addColorStop(0, 'transparent');
-      gradient.addColorStop(0.5, 'rgba(139, 92, 246, 1)');
+      gradient.addColorStop(0.5, 'rgba(0, 255, 255, 1)');
       gradient.addColorStop(1, 'transparent');
 
       ctx.fillStyle = gradient;
@@ -359,7 +429,7 @@ const ScannerAura: React.FC = () => {
         }
 
         ctx.globalAlpha = p.life;
-        ctx.fillStyle = '#c4b5fd';
+        ctx.fillStyle = '#00ffff';
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fill();
@@ -386,37 +456,42 @@ const ScannerAura: React.FC = () => {
 const ProjectCardStream: React.FC = () => {
   const [position, setPosition] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const lastMouseX = useRef(0);
   const velocity = useRef(50);
   const direction = useRef(1);
 
   const projects: Project[] = useMemo(() => [
-    { 
-      id: 1, 
-      title: 'AUTH SYSTEM', 
-      image: '/images/projects/auth-system.png', 
-      url: 'https://github.com/Mohak-787/auth-system' 
+    {
+      id: 1,
+      title: 'Auth System',
+      image: '/images/projects/auth-system.png',
+      url: 'https://github.com/Mohak-787/auth-system',
+      description: 'Robust authentication system using JWT and Refresh Tokens with advanced security features.',
+      isFeatured: true
     },
-    { 
-      id: 2, 
-      title: 'MOVEX BACKEND', 
-      image: '/images/projects/movex-backend.png', 
-      url: 'https://github.com/Mohak-787/MoveX-Backend' 
+    {
+      id: 2,
+      title: 'MoveX Backend',
+      image: '/images/projects/movex-backend.png',
+      url: 'https://github.com/Mohak-787/MoveX-Backend',
+      description: 'Scalable backend for storage services with real-time tracking.',
     },
-    { 
-      id: 3, 
-      title: 'BANKLEDGER', 
-      image: '/images/projects/bankledger-backend.png', 
-      url: 'https://github.com/Mohak-787/BankLedger-Backend' 
+    {
+      id: 3,
+      title: 'BankLedger',
+      image: '/images/projects/bankledger-backend.png',
+      url: 'https://github.com/Mohak-787/BankLedger-Backend',
+      description: 'Secure banking ledger system with transaction processing and audit logs.',
     },
-    { 
-      id: 4, 
-      title: 'CHATIEE', 
-      image: '/images/projects/chatiee.png', 
-      url: 'https://github.com/Mohak-787/chatiee' 
+    {
+      id: 4,
+      title: 'Chatiee',
+      image: '/images/projects/chatiee.png',
+      url: 'https://github.com/Mohak-787/chatiee',
+      description: 'Real-time chat app with group messaging and file sharing.',
     },
   ], []);
-
   const displayProjects = useMemo(() => [...projects, ...projects, ...projects], [projects]);
   const totalWidth = displayProjects.length * (CARD_WIDTH + CARD_GAP);
 
@@ -427,8 +502,8 @@ const ProjectCardStream: React.FC = () => {
     const animate = (time: number) => {
       const dt = (time - lastTime) / 1000;
       lastTime = time;
-
-      if (!isDragging) {
+ 
+      if (!isDragging && !isPaused) {
         setPosition(prev => {
           let next = prev + velocity.current * direction.current * dt;
           if (next < -totalWidth / 2) next += totalWidth / 3;
@@ -461,6 +536,18 @@ const ProjectCardStream: React.FC = () => {
   const onMouseUp = () => {
     setIsDragging(false);
   };
+ 
+  const onWheel = (e: React.WheelEvent) => {
+    // We want horizontal scroll, but many users have vertical wheels.
+    // Use deltaY to scroll horizontally if deltaX is small.
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    setPosition(prev => {
+      let next = prev - delta;
+      if (next < -totalWidth / 2) next += totalWidth / 3;
+      if (next > 0) next -= totalWidth / 3;
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (isDragging) {
@@ -480,6 +567,9 @@ const ProjectCardStream: React.FC = () => {
   return (
     <div
       className="card-stream-container"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onWheel={onWheel}
       style={{
         position: 'relative',
         width: '100vw',
@@ -526,11 +616,11 @@ const ProjectCardStream: React.FC = () => {
           left: '50%',
           top: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '4px',
+          width: '3px',
           height: '350px',
           borderRadius: '30px',
-          background: 'linear-gradient(to bottom, transparent, #00ffff, #00ffff, #00ffff, transparent)',
-          boxShadow: '0 0 20px #00ffff, 0 0 40px rgba(0, 255, 255, 0.4)',
+          background: 'linear-gradient(to bottom, transparent, #0891b2, #0891b2, #0891b2, transparent)',
+          boxShadow: '0 0 15px #0891b2, 0 0 30px rgba(8, 145, 178, 0.3)',
           zIndex: 20,
         }}
       />
