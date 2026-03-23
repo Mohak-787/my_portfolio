@@ -48,13 +48,13 @@ function App() {
         <section
           id="projects"
           style={{
-            minHeight: "100svh",
-            padding: "96px 0",
+            minHeight: "40svh",
+            padding: "120px 0 60px 0",
             backgroundColor: "#000000",
+            overflow: "hidden",
             display: "flex",
             flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            alignItems: "center"
           }}
         >
           <h2 style={{
@@ -78,7 +78,7 @@ function App() {
           id="contact"
           style={{
             minHeight: "40svh",
-            padding: "120px 24px",
+            padding: "60px 24px 120px 24px",
             backgroundColor: "#000000",
             display: "flex",
             flexDirection: "column",
