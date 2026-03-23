@@ -64,10 +64,10 @@ const Navbar: React.FC = () => {
         </a>
 
         {/* Desktop Navigation Links */}
-        <div 
+        <div
           className="desktop-menu"
-          style={{ 
-            display: 'flex', 
+          style={{
+            display: 'flex',
             gap: '32px',
           }}
         >
@@ -149,7 +149,7 @@ const Navbar: React.FC = () => {
       </nav>
 
       {/* Mobile Menu Drawer Overlay */}
-      <div 
+      <div
         style={{
           position: 'fixed',
           top: 0,

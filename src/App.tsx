@@ -4,20 +4,21 @@ import { PixelCanvas } from "./components/ui/pixel-canvas"
 import { LiquidGlassCard } from "./components/ui/liquid-glass-card"
 
 import ProjectCardStream from "./components/features/ProjectCardStream"
+import TechStack from "./components/features/TechStack"
 
 function App() {
   return (
     <>
       <Navbar />
       <main style={{ paddingBottom: "96px" }}>
-        <section id="home">
+        <section id="home" style={{ padding: "40px 0" }}>
           <HeroSection />
         </section>
 
         <section
           id="about"
           style={{
-            padding: "120px 0",
+            padding: "40px 0",
             position: "relative",
             overflow: "hidden",
             backgroundColor: "#000000",
@@ -45,11 +46,13 @@ function App() {
           </div>
         </section>
 
+        <TechStack />
+
         <section
           id="projects"
           style={{
             minHeight: "40svh",
-            padding: "120px 0 60px 0",
+            padding: "40px 0 40px 0",
             backgroundColor: "#000000",
             overflow: "hidden",
             display: "flex",
@@ -78,7 +81,7 @@ function App() {
           id="contact"
           style={{
             minHeight: "40svh",
-            padding: "60px 24px 120px 24px",
+            padding: "40px 24px 80px 24px",
             backgroundColor: "#000000",
             display: "flex",
             flexDirection: "column",

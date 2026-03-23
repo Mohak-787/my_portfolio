@@ -85,9 +85,9 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ title, descrip
             justifyContent: "center",
             boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
           }}>
-            <img 
-              src={imageSrc} 
-              alt="Profile" 
+            <img
+              src={imageSrc}
+              alt="Profile"
               style={{
                 width: "100%",
                 height: "100%",
