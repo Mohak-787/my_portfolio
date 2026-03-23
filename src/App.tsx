@@ -1,15 +1,16 @@
-import "./index.css"
-import HeroSection from "./components/HeroSection"
+import HeroSection from "./components/layout/HeroSection"
+import Navbar from "./components/layout/Navbar"
 import { PixelCanvas } from "./components/ui/pixel-canvas"
 import { LiquidGlassCard } from "./components/ui/liquid-glass-card"
 
-import ProjectCardStream from "./components/ProjectCardStream"
+import ProjectCardStream from "./components/features/ProjectCardStream"
 
 function App() {
   return (
     <>
+      <Navbar />
       <main style={{ paddingBottom: "96px" }}>
-        <section>
+        <section id="home">
           <HeroSection />
         </section>
 
@@ -71,6 +72,60 @@ function App() {
             Featured Projects
           </h2>
           <ProjectCardStream />
+        </section>
+
+        <section
+          id="contact"
+          style={{
+            minHeight: "40svh",
+            padding: "120px 24px",
+            backgroundColor: "#000000",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center"
+          }}
+        >
+          <h2 style={{
+            fontSize: "clamp(32px, 5vw, 48px)",
+            fontWeight: 800,
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+            marginBottom: "24px",
+            fontFamily: 'Outfit, sans-serif',
+            background: "linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}>
+            Get In Touch
+          </h2>
+          <p style={{
+            color: "#94A3B8",
+            fontSize: "18px",
+            maxWidth: "600px",
+            margin: "0 auto 32px",
+            lineHeight: "1.6"
+          }}>
+            I'm always open to new opportunities and collaborations. Feel free to reach out!
+          </p>
+          <a
+            href="mailto:example@email.com"
+            style={{
+              padding: "14px 32px",
+              borderRadius: "16px",
+              backgroundColor: "#FFFFFF",
+              color: "#000000",
+              textDecoration: "none",
+              fontWeight: 600,
+              fontSize: "16px",
+              transition: "transform 0.2s ease",
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+            onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+          >
+            Say Hello
+          </a>
         </section>
 
       </main>

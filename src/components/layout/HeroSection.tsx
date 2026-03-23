@@ -1,4 +1,4 @@
-import CosmicHeroBackground from "./CosmicHeroBackground"
+import CosmicHeroBackground from "../ui/CosmicHeroBackground"
 
 export default function HeroSection() {
   return (

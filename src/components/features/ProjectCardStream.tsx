@@ -32,57 +32,11 @@ const generateCode = (width: number, height: number) => {
 
 // --- Sub-Components ---
 
-const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
-  const cardRef = useRef<HTMLAnchorElement>(null);
+const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => {
   const [asciiContent, setAsciiContent] = useState("");
 
   useEffect(() => {
     setAsciiContent(generateCode(66, 19));
-  }, []);
-
-  useEffect(() => {
-    const updateClipping = () => {
-      if (!cardRef.current) return;
-
-      const rect = cardRef.current.getBoundingClientRect();
-      const scannerX = window.innerWidth / 2;
-      const scannerLeft = scannerX - SCAN_WIDTH / 2;
-      const scannerRight = scannerX + SCAN_WIDTH / 2;
-
-      const cardLeft = rect.left;
-      const cardRight = rect.right;
-      const width = rect.width;
-
-      const normalCard = cardRef.current.querySelector('.card-normal') as HTMLElement;
-      const asciiCard = cardRef.current.querySelector('.card-ascii') as HTMLElement;
-
-      if (!normalCard || !asciiCard) return;
-
-      if (cardLeft < scannerRight && cardRight > scannerLeft) {
-        const scannerIntersectLeft = Math.max(scannerLeft - cardLeft, 0);
-        const scannerIntersectRight = Math.min(scannerRight - cardLeft, width);
-
-        const normalClipRight = (scannerIntersectLeft / width) * 100;
-        const asciiClipLeft = (scannerIntersectRight / width) * 100;
-
-        normalCard.style.setProperty("--clip-right", `${normalClipRight}%`);
-        asciiCard.style.setProperty("--clip-left", `${asciiClipLeft}%`);
-      } else {
-        if (cardRight < scannerLeft) {
-          normalCard.style.setProperty("--clip-right", "100%");
-          asciiCard.style.setProperty("--clip-left", "100%");
-        } else if (cardLeft > scannerRight) {
-          normalCard.style.setProperty("--clip-right", "0%");
-          asciiCard.style.setProperty("--clip-left", "0%");
-        }
-      }
-    };
-
-    const raf = requestAnimationFrame(function animate() {
-      updateClipping();
-      requestAnimationFrame(animate);
-    });
-    return () => cancelAnimationFrame(raf);
   }, []);
 
   return (
@@ -90,7 +44,6 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
       href={project.url}
       target="_blank"
       rel="noopener noreferrer"
-      ref={cardRef}
       className="card-wrapper"
       style={{
         position: 'relative',
@@ -254,7 +207,7 @@ const ProjectCard: React.FC<{ project: Project }> = ({ project }) => {
       </div>
     </a>
   );
-};
+});
 
 const BackgroundParticles: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -389,7 +342,7 @@ const ScannerAura: React.FC = () => {
 
     let rafId: number;
     const particles: any[] = [];
-    const maxParticles = 300;
+    const maxParticles = 150; // Reduced count
 
     const createParticle = () => ({
       x: canvas.width / 2 + (Math.random() - 0.5) * 4,
@@ -405,17 +358,11 @@ const ScannerAura: React.FC = () => {
       rafId = requestAnimationFrame(animate);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      gradient.addColorStop(0, 'transparent');
-      gradient.addColorStop(0.5, 'rgba(0, 255, 255, 1)');
-      gradient.addColorStop(1, 'transparent');
-
-      ctx.fillStyle = gradient;
-      ctx.fillRect(canvas.width / 2 - 2, 0, 4, canvas.height);
-
       if (particles.length < maxParticles) {
         particles.push(createParticle());
       }
+
+      ctx.fillStyle = '#00ffff'; // Single color fill is faster
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
@@ -429,17 +376,15 @@ const ScannerAura: React.FC = () => {
         }
 
         ctx.globalAlpha = p.life;
-        ctx.fillStyle = '#00ffff';
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
+        // Use fillRect instead of arc for performance
+        ctx.fillRect(p.x - p.size / 2, p.y - p.size / 2, p.size, p.size);
       }
     };
     animate();
 
     const handleResize = () => {
       canvas.width = window.innerWidth;
-      canvas.height = 300;
+      canvas.height = 250;
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -450,16 +395,17 @@ const ScannerAura: React.FC = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: 0, width: '100%', height: '300px', zIndex: 15, pointerEvents: 'none' }} />;
+  return <canvas ref={canvasRef} style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: 0, width: '100%', height: '250px', zIndex: 15, pointerEvents: 'none' }} />;
 };
 
 const ProjectCardStream: React.FC = () => {
-  const [position, setPosition] = useState(0);
+  const positionRef = useRef(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const cardLineRef = useRef<HTMLDivElement>(null);
   const lastMouseX = useRef(0);
-  const velocity = useRef(50);
-  const direction = useRef(1);
+  const velocity = useRef(85); // Final refined speed
+  const direction = useRef(1); // Left to Right
 
   const projects: Project[] = useMemo(() => [
     {
@@ -502,14 +448,46 @@ const ProjectCardStream: React.FC = () => {
     const animate = (time: number) => {
       const dt = (time - lastTime) / 1000;
       lastTime = time;
- 
+
       if (!isDragging && !isPaused) {
-        setPosition(prev => {
-          let next = prev + velocity.current * direction.current * dt;
-          if (next < -totalWidth / 2) next += totalWidth / 3;
-          if (next > 0) next -= totalWidth / 3;
-          return next;
-        });
+        positionRef.current += velocity.current * direction.current * dt;
+        if (positionRef.current < -totalWidth / 2) positionRef.current += totalWidth / 3;
+        if (positionRef.current > 0) positionRef.current -= totalWidth / 3;
+      }
+
+      // High-performance DOM update
+      if (cardLineRef.current) {
+        cardLineRef.current.style.transform = `translateX(${positionRef.current}px)`;
+
+        const cards = cardLineRef.current.children;
+        const scannerX = window.innerWidth / 2;
+        const scannerLeft = scannerX - SCAN_WIDTH / 2;
+        const scannerRight = scannerX + SCAN_WIDTH / 2;
+
+        for (let i = 0; i < cards.length; i++) {
+          const card = cards[i] as HTMLElement;
+          const cardLeft = positionRef.current + i * (CARD_WIDTH + CARD_GAP);
+          const cardRight = cardLeft + CARD_WIDTH;
+
+          const normalCard = card.querySelector('.card-normal') as HTMLElement;
+          const asciiCard = card.querySelector('.card-ascii') as HTMLElement;
+          if (!normalCard || !asciiCard) continue;
+
+          if (cardLeft < scannerRight && cardRight > scannerLeft) {
+            const scannerIntersectLeft = Math.max(scannerLeft - cardLeft, 0);
+            const scannerIntersectRight = Math.min(scannerRight - cardLeft, CARD_WIDTH);
+            normalCard.style.setProperty("--clip-right", `${(scannerIntersectLeft / CARD_WIDTH) * 100}%`);
+            asciiCard.style.setProperty("--clip-left", `${(scannerIntersectRight / CARD_WIDTH) * 100}%`);
+          } else {
+            if (cardRight < scannerLeft) {
+              normalCard.style.setProperty("--clip-right", "100%");
+              asciiCard.style.setProperty("--clip-left", "100%");
+            } else {
+              normalCard.style.setProperty("--clip-right", "0%");
+              asciiCard.style.setProperty("--clip-left", "0%");
+            }
+          }
+        }
       }
 
       rafId = requestAnimationFrame(animate);
@@ -517,7 +495,7 @@ const ProjectCardStream: React.FC = () => {
 
     rafId = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(rafId);
-  }, [isDragging, totalWidth]);
+  }, [isDragging, totalWidth, isPaused]);
 
   const onMouseDown = (e: React.MouseEvent | React.TouchEvent) => {
     setIsDragging(true);
@@ -530,23 +508,24 @@ const ProjectCardStream: React.FC = () => {
     const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
     const deltaX = clientX - lastMouseX.current;
     lastMouseX.current = clientX;
-    setPosition(prev => prev + deltaX);
+    positionRef.current += deltaX;
+
+    // Bounds check during drag
+    if (positionRef.current < -totalWidth / 2) positionRef.current += totalWidth / 3;
+    if (positionRef.current > 0) positionRef.current -= totalWidth / 3;
   };
 
   const onMouseUp = () => {
     setIsDragging(false);
   };
- 
+
   const onWheel = (e: React.WheelEvent) => {
-    // We want horizontal scroll, but many users have vertical wheels.
-    // Use deltaY to scroll horizontally if deltaX is small.
     const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    setPosition(prev => {
-      let next = prev - delta;
-      if (next < -totalWidth / 2) next += totalWidth / 3;
-      if (next > 0) next -= totalWidth / 3;
-      return next;
-    });
+    positionRef.current -= delta;
+
+    // Bounds check during scroll
+    if (positionRef.current < -totalWidth / 2) positionRef.current += totalWidth / 3;
+    if (positionRef.current > 0) positionRef.current -= totalWidth / 3;
   };
 
   useEffect(() => {
@@ -585,6 +564,7 @@ const ProjectCardStream: React.FC = () => {
 
       <div
         className="card-line"
+        ref={cardLineRef}
         onMouseDown={onMouseDown}
         onTouchStart={onMouseDown}
         style={{
@@ -593,7 +573,6 @@ const ProjectCardStream: React.FC = () => {
           gap: `${CARD_GAP}px`,
           position: 'absolute',
           left: 0,
-          transform: `translateX(${position}px)`,
           cursor: isDragging ? 'grabbing' : 'grab',
           userSelect: 'none',
           willChange: 'transform',
