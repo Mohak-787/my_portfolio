@@ -49,7 +49,7 @@ const Navbar: React.FC = () => {
           justifyContent: 'space-between',
           padding: '0 5%',
           transition: 'all 0.3s ease',
-          backgroundColor: isScrolled || isMenuOpen ? 'rgba(0, 0, 0, 0.75)' : 'transparent',
+          backgroundColor: isScrolled || isMenuOpen ? 'rgba(0, 0, 0, 0.2)' : 'transparent',
           backdropFilter: isScrolled || isMenuOpen ? 'blur(12px)' : 'none',
           WebkitBackdropFilter: isScrolled || isMenuOpen ? 'blur(12px)' : 'none',
           borderBottom: isScrolled || isMenuOpen ? '1px solid rgba(255, 255, 255, 0.1)' : 'none',

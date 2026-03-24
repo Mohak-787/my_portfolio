@@ -13,14 +13,14 @@ const ContactCard: React.FC<ContactCardProps> = ({ icon, title, detail, link, li
   return (
     <div style={{
       flex: '1',
-      minWidth: '280px',
-      maxWidth: '350px',
-      background: 'rgba(255, 255, 255, 0.06)',
-      backdropFilter: 'blur(16px) saturate(180%)',
-      WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-      border: '1px solid rgba(255, 255, 255, 0.12)',
+      minWidth: '320px',
+      maxWidth: '380px',
+      background: 'rgba(0, 0, 0, 0.2)',
+      backdropFilter: 'blur(24px) saturate(200%)',
+      WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
       borderRadius: '24px',
-      padding: '44px 32px',
+      padding: '44px 28px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -30,20 +30,20 @@ const ContactCard: React.FC<ContactCardProps> = ({ icon, title, detail, link, li
       cursor: 'default',
       position: 'relative',
       overflow: 'hidden',
-      boxShadow: '0 20px 50px -12px rgba(0, 0, 0, 0.5)',
+      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7)',
     }}
       className="group"
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-10px)';
-        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
-        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.2)';
-        e.currentTarget.style.boxShadow = '0 30px 60px -12px rgba(0, 0, 0, 0.7)';
+        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.5)';
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+        e.currentTarget.style.boxShadow = '0 40px 80px -12px rgba(0, 0, 0, 0.8)';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.background = 'rgba(255, 255, 255, 0.09)';
-        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.12)';
-        e.currentTarget.style.boxShadow = '0 20px 50px -12px rgba(0, 0, 0, 0.5)';
+        e.currentTarget.style.background = 'rgba(0, 0, 0, 0.3)';
+        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+        e.currentTarget.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.7)';
       }}
     >
       {/* Glare Effect on Hover */}

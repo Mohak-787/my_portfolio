@@ -35,7 +35,7 @@ export const LiquidGlassCard: React.FC<LiquidGlassCardProps> = ({ title, descrip
 
       <div
         style={{
-          background: "rgba(255, 255, 255, 0.03)",
+          background: "rgba(0, 0, 0, 0.2)",
           backdropFilter: "blur(16px) saturate(180%)",
           WebkitBackdropFilter: "blur(16px) saturate(180%)",
           border: "1px solid rgba(255, 255, 255, 0.12)",

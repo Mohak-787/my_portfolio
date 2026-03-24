@@ -1,12 +1,15 @@
 {
-  "name": "cosmic-dashboard",
+  "name": "my_portfolio",
+  "homepage": "https://mohak-787.com.np/my_portfolio",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.2.4",
@@ -14,6 +17,7 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "framer-motion": "^12.37.0",
+    "gh-pages": "^6.3.0",
     "lucide-react": "^0.577.0",
     "next-themes": "^0.4.6",
     "react": "^18.2.0",
