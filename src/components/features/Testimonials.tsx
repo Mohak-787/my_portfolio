@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Star } from "lucide-react";
 import { CardStack, CardStackItem } from "../ui/card-stack";
 
 const testimonials: CardStackItem[] = [
@@ -58,11 +59,11 @@ export default function Testimonials() {
   }, []);
 
   return (
-    <div 
-      style={{ 
-        width: "100%", 
-        maxWidth: "1100px", 
-        margin: "0 auto", 
+    <div
+      style={{
+        width: "100%",
+        maxWidth: "1100px",
+        margin: "0 auto",
         padding: "0 24px",
         display: "flex",
         justifyContent: "center",
@@ -72,9 +73,6 @@ export default function Testimonials() {
       <CardStack
         items={testimonials}
         initialIndex={0}
-        autoAdvance
-        intervalMs={5000}
-        pauseOnHover
         showDots
         cardWidth={cardSize.width}
         cardHeight={cardSize.height}
@@ -153,6 +151,18 @@ export default function Testimonials() {
             }}>
               "{item.description}"
             </p>
+
+            {/* Star Rating */}
+            <div style={{
+              display: "flex",
+              gap: "4px",
+              marginTop: "auto",
+              filter: "drop-shadow(0 0 8px rgba(250, 204, 21, 0.3))"
+            }}>
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} size={16} fill="#FACC15" color="#FACC15" />
+              ))}
+            </div>
 
             {/* Subtle glow highlight */}
             <div

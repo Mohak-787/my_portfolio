@@ -39,7 +39,7 @@ const TechStack: React.FC = () => {
     <section
       id="tech-stack"
       style={{
-        padding: "40px 24px",
+        padding: "20px 24px",
         backgroundColor: "#000000",
         display: "flex",
         alignItems: "center",
