@@ -5,6 +5,7 @@ import { LiquidGlassCard } from "./components/ui/liquid-glass-card"
 
 import ProjectCardStream from "./components/features/ProjectCardStream"
 import TechStack from "./components/features/TechStack"
+import Testimonials from "./components/features/Testimonials"
 
 function App() {
   return (
@@ -51,8 +52,8 @@ function App() {
         <section
           id="projects"
           style={{
-            minHeight: "40svh",
-            padding: "40px 0 40px 0",
+            minHeight: "30svh",
+            padding: "40px 0 0 0",
             backgroundColor: "#000000",
             overflow: "hidden",
             display: "flex",
@@ -77,6 +78,34 @@ function App() {
           <ProjectCardStream />
         </section>
 
+        <section
+          id="testimonials"
+          style={{
+            padding: "20px 0 40px 0",
+            backgroundColor: "#000000",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center"
+          }}
+        >
+          <h2 style={{
+            fontSize: "clamp(32px, 5vw, 48px)",
+            fontWeight: 800,
+            letterSpacing: "0.04em",
+            textTransform: "uppercase",
+            marginBottom: "48px",
+            fontFamily: 'Outfit, sans-serif',
+            background: "linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            textAlign: "center"
+          }}>
+            Testimonials
+          </h2>
+          <Testimonials />
+        </section>
         <section
           id="contact"
           style={{
