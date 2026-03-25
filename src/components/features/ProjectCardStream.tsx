@@ -219,7 +219,7 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
             left: 0,
             width: '100%',
             height: '100%',
-            color: 'rgba(8, 145, 178, 0.6)',
+            color: 'rgba(59, 130, 246, 0.6)',
             fontFamily: 'monospace',
             fontSize: '9px',
             lineHeight: '11px',
@@ -268,8 +268,8 @@ const BackgroundParticles: React.FC = () => {
     const half = pCanvas.width / 2;
     const gradient = pCtx.createRadialGradient(half, half, 0, half, half, half);
     gradient.addColorStop(0.025, "#fff");
-    gradient.addColorStop(0.1, `hsl(217, 61%, 33%)`);
-    gradient.addColorStop(0.25, `hsl(217, 64%, 6%)`);
+    gradient.addColorStop(0.1, `hsl(221, 83%, 33%)`);
+    gradient.addColorStop(0.25, `hsl(221, 83%, 15%)`);
     gradient.addColorStop(1, "transparent");
     pCtx.fillStyle = gradient;
     pCtx.beginPath();
@@ -389,7 +389,7 @@ const ScannerAura: React.FC = () => {
         particles.push(createParticle());
       }
 
-      ctx.fillStyle = '#00ffff'; // Single color fill is faster
+      ctx.fillStyle = '#3B82F6'; // Single color fill is faster
 
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
@@ -625,8 +625,8 @@ const ProjectCardStream: React.FC = () => {
           width: '3px',
           height: '350px',
           borderRadius: '30px',
-          background: 'linear-gradient(to bottom, transparent, #0891b2, #0891b2, #0891b2, transparent)',
-          boxShadow: '0 0 15px #0891b2, 0 0 30px rgba(8, 145, 178, 0.3)',
+          background: 'linear-gradient(to bottom, transparent, #3B82F6, #3B82F6, #3B82F6, transparent)',
+          boxShadow: '0 0 15px #3B82F6, 0 0 30px rgba(59, 130, 246, 0.4)',
           zIndex: 20,
         }}
       />
