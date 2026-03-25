@@ -81,8 +81,7 @@ const TechStack: React.FC = () => {
             maxWidth: "400px",
             lineHeight: "1.6"
           }}>
-            I leverage a modern set of tools and technologies to build high-performance, scalable applications. 
-            My expertise spans across frontend, backend, and various development environments.
+            I build backend systems with Node.js, focusing on fast and reliable APIs. I work with PostgreSQL and MongoDB, and I care about writing clean, maintainable code that performs well in real-world applications.
           </p>
         </div>
         
