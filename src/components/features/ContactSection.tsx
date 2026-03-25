@@ -171,13 +171,13 @@ const ContactSection: React.FC = () => {
     <div style={{
       width: '100%',
       maxWidth: '1100px',
-      margin: '40px auto 0',
+      margin: '56px auto 0',
       display: 'flex',
       flexDirection: 'row',
       flexWrap: 'wrap',
       justifyContent: 'center',
-      gap: '24px',
-      padding: '0 24px',
+      gap: '28px',
+      padding: '0 24px 12px',
     }}>
       <ContactCard
         icon={<Mail size={28} />}

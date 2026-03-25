@@ -39,7 +39,7 @@ const TechStack: React.FC = () => {
     <section
       id="skills"
       style={{
-        padding: "96px 24px",
+        padding: "120px 24px",
         backgroundColor: "#000000",
         display: "flex",
         alignItems: "center",
@@ -49,12 +49,12 @@ const TechStack: React.FC = () => {
       <div 
         style={{
           width: "100%",
-          maxWidth: "1100px",
+          maxWidth: "1200px",
           display: "flex",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          gap: "48px",
+          gap: "56px",
           flexWrap: "wrap" // For basic responsiveness if screen gets too narrow
         }}
         className="tech-stack-container"
