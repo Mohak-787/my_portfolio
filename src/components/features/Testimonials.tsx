@@ -82,9 +82,9 @@ export default function Testimonials() {
               width: "100%",
               height: "100%",
               background: "rgba(0, 0, 0, 0.2)",
-          backdropFilter: "blur(24px) saturate(200%)",
-          WebkitBackdropFilter: "blur(24px) saturate(200%)",
-          border: "1px solid rgba(255, 255, 255, 0.08)",
+              backdropFilter: "blur(24px) saturate(200%)",
+              WebkitBackdropFilter: "blur(24px) saturate(200%)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
               borderRadius: "24px",
               padding: "32px",
               display: "flex",
@@ -118,7 +118,7 @@ export default function Testimonials() {
                   }}
                 />
               </div>
-              <div style={{ display: "flex", flexDirection: "column" }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
                 <h3 style={{
                   fontSize: "20px",
                   fontWeight: 700,
@@ -134,6 +134,7 @@ export default function Testimonials() {
                   color: "#94A3B8",
                   fontWeight: 400,
                   fontFamily: 'Outfit, sans-serif',
+                  textAlign: "left",
                 }}>
                   {item.ctaLabel}
                 </span>
