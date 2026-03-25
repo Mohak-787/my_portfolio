@@ -16,7 +16,7 @@ interface Project {
 const SCAN_WIDTH = 8;
 const PARTICLE_COUNT = 150;
 const CARD_WIDTH = 400;
-const CARD_GAP = 60;
+const CARD_GAP = 48;
 const CODE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789(){}[]<>;:,._-+=!@#$%^&*|\\/\"'`~?";
 
 // --- Helper Functions ---
@@ -131,7 +131,7 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
         </div>
 
         {/* Introduction */}
-        <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <h3 style={{
             fontSize: '24px',
             fontWeight: 800,
@@ -154,7 +154,7 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
             WebkitLineClamp: 2,
             WebkitBoxOrient: 'vertical',
             overflow: 'hidden',
-            margin: '4px 0',
+            margin: '0',
           }}>
             {project.description}
           </p>

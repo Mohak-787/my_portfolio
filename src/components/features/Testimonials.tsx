@@ -62,7 +62,7 @@ export default function Testimonials() {
     <div
       style={{
         width: "100%",
-        maxWidth: "1100px",
+        maxWidth: "1280px",
         margin: "0 auto",
         padding: "0 24px",
         display: "flex",
@@ -86,17 +86,17 @@ export default function Testimonials() {
               WebkitBackdropFilter: "blur(24px) saturate(200%)",
               border: "1px solid rgba(255, 255, 255, 0.08)",
               borderRadius: "24px",
-              padding: "32px",
+              padding: "40px",
               display: "flex",
               flexDirection: "column",
-              gap: "20px",
+              gap: "24px",
               boxShadow: "0 25px 80px -12px rgba(0, 0, 0, 0.6)",
               position: "relative",
               overflow: "hidden",
             }}
           >
             {/* Header: Photo and Info */}
-            <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
               <div style={{
                 width: "64px",
                 height: "64px",

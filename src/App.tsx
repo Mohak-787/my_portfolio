@@ -14,14 +14,14 @@ function App() {
     <>
       <Navbar />
       <main>
-        <section id="home" style={{ padding: "20px 0" }}>
+        <section id="home" style={{ padding: "0" }}>
           <HeroSection />
         </section>
 
         <section
           id="about"
           style={{
-            padding: "20px 0",
+            padding: "96px 0",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -42,7 +42,7 @@ function App() {
           id="projects"
           style={{
             minHeight: "30svh",
-            padding: "20px 0",
+            padding: "96px 0",
             backgroundColor: "#000000",
             overflow: "hidden",
             display: "flex",
@@ -55,7 +55,7 @@ function App() {
             fontWeight: 800,
             letterSpacing: "0.04em",
             textTransform: "uppercase",
-            marginBottom: "24px",
+            marginBottom: "48px",
             fontFamily: 'Outfit, sans-serif',
             background: "linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)",
             WebkitBackgroundClip: "text",
@@ -70,7 +70,7 @@ function App() {
         <section
           id="testimonials"
           style={{
-            padding: "20px 0",
+            padding: "96px 0",
             backgroundColor: "#000000",
             display: "flex",
             flexDirection: "column",
@@ -84,7 +84,7 @@ function App() {
             fontWeight: 800,
             letterSpacing: "0.04em",
             textTransform: "uppercase",
-            marginBottom: "24px",
+            marginBottom: "48px",
             fontFamily: 'Outfit, sans-serif',
             background: "linear-gradient(to bottom, #FFFFFF 30%, #94A3B8 100%)",
             WebkitBackgroundClip: "text",
@@ -99,8 +99,7 @@ function App() {
           id="contact"
           style={{
             minHeight: "40svh",
-            marginTop: "100px",
-            padding: "20px 24px",
+            padding: "96px 24px",
             backgroundColor: "#000000",
             display: "flex",
             flexDirection: "column",

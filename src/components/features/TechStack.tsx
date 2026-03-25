@@ -37,9 +37,9 @@ const slugs = [
 const TechStack: React.FC = () => {
   return (
     <section
-      id="tech-stack"
+      id="skills"
       style={{
-        padding: "20px 24px",
+        padding: "96px 24px",
         backgroundColor: "#000000",
         display: "flex",
         alignItems: "center",
@@ -72,7 +72,7 @@ const TechStack: React.FC = () => {
             margin: 0,
             lineHeight: "1.1"
           }}>
-            Tech<br />Stack
+            My<br />Skills
           </h2>
           <p style={{
             color: "#94A3B8",
