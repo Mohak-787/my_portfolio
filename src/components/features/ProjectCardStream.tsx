@@ -15,9 +15,68 @@ interface Project {
 // --- Constants ---
 const SCAN_WIDTH = 8;
 const PARTICLE_COUNT = 150;
-const CARD_WIDTH = 400;
 const CARD_GAP = 48;
 const CODE_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789(){}[]<>;:,._-+=!@#$%^&*|\\/\"'`~?";
+
+interface CardDims {
+  cardWidth: number;
+  cardHeight: number;
+  imageHeight: number;
+  contentPadding: number;
+  containerHeight: number;
+  scannerHeight: number;
+  canvasHeight: number;
+  asciiCols: number;
+  asciiRows: number;
+  asciiFont: number;
+  asciiLineHeight: number;
+}
+
+const getCardDims = (width: number): CardDims => {
+  if (width < 640) {
+    return {
+      cardWidth: 320,
+      cardHeight: 230,
+      imageHeight: 90,
+      contentPadding: 20,
+      containerHeight: 360,
+      scannerHeight: 280,
+      canvasHeight: 220,
+      asciiCols: 50,
+      asciiRows: 16,
+      asciiFont: 8,
+      asciiLineHeight: 10,
+    };
+  }
+  if (width < 1024) {
+    return {
+      cardWidth: 380,
+      cardHeight: 260,
+      imageHeight: 100,
+      contentPadding: 22,
+      containerHeight: 420,
+      scannerHeight: 320,
+      canvasHeight: 260,
+      asciiCols: 62,
+      asciiRows: 18,
+      asciiFont: 9,
+      asciiLineHeight: 11,
+    };
+  }
+  return {
+    cardWidth: 480,
+    cardHeight: 300,
+    imageHeight: 120,
+    contentPadding: 28,
+    containerHeight: 520,
+    scannerHeight: 420,
+    canvasHeight: 300,
+    asciiCols: 74,
+    asciiRows: 21,
+    asciiFont: 10,
+    asciiLineHeight: 12,
+  };
+};
 
 // --- Helper Functions ---
 const generateCode = (width: number, height: number) => {
@@ -32,12 +91,12 @@ const generateCode = (width: number, height: number) => {
 
 // --- Sub-Components ---
 
-const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => {
+const ProjectCard: React.FC<{ project: Project; dims: CardDims }> = React.memo(({ project, dims }) => {
   const [asciiContent, setAsciiContent] = useState("");
 
   useEffect(() => {
-    setAsciiContent(generateCode(66, 19));
-  }, []);
+    setAsciiContent(generateCode(dims.asciiCols, dims.asciiRows));
+  }, [dims.asciiCols, dims.asciiRows]);
 
   return (
     <a
@@ -47,8 +106,8 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
       className="card-wrapper"
       style={{
         position: 'relative',
-        width: `${CARD_WIDTH}px`,
-        height: '250px',
+        width: `${dims.cardWidth}px`,
+        height: `${dims.cardHeight}px`,
         flexShrink: 0,
         display: 'block',
         textDecoration: 'none',
@@ -75,13 +134,13 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
           overflow: 'hidden',
           zIndex: 2,
           clipPath: 'inset(0 0 0 var(--clip-right, 0%))',
-          backgroundColor: 'rgba(255, 255, 255, 0.03)',
-          backdropFilter: 'blur(16px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(16px) saturate(180%)',
-          border: '1px solid rgba(255, 255, 255, 0.12)',
+          backgroundColor: 'rgba(0, 0, 0, 0.35)',
+          backdropFilter: 'blur(24px) saturate(200%)',
+          WebkitBackdropFilter: 'blur(24px) saturate(200%)',
+          border: '1px solid rgba(255, 255, 255, 0.08)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: '0 25px 80px -12px rgba(0, 0, 0, 0.6)',
+          boxShadow: '0 25px 70px -18px rgba(0, 0, 0, 0.7)',
         }}
       >
         {/* Subtle highlight glare on hover */}
@@ -100,7 +159,7 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
           className="group-hover:left-[150%]"
         />
         {/* Compact Image */}
-        <div style={{ position: 'relative', width: '100%', height: '90px', overflow: 'hidden' }}>
+        <div style={{ position: 'relative', width: '100%', height: `${dims.imageHeight}px`, overflow: 'hidden' }}>
           <img
             src={project.image}
             alt={project.title}
@@ -111,8 +170,8 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
               position: 'absolute',
               top: '8px',
               left: '8px',
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              color: '#0f172a',
+              backgroundColor: 'rgba(255, 255, 255, 0.08)',
+              color: '#FFFFFF',
               padding: '4px 12px',
               borderRadius: '9999px',
               fontSize: '11px',
@@ -120,7 +179,8 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
               display: 'flex',
               alignItems: 'center',
               gap: '6px',
-              boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+              border: '1px solid rgba(255, 255, 255, 0.14)',
+              boxShadow: '0 6px 16px rgba(0, 0, 0, 0.35)',
             }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -131,7 +191,7 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
         </div>
 
         {/* Introduction */}
-        <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ padding: `${dims.contentPadding}px`, flex: 1, display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <h3 style={{
             fontSize: '24px',
             fontWeight: 800,
@@ -221,8 +281,8 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
             height: '100%',
             color: 'rgba(59, 130, 246, 0.6)',
             fontFamily: 'monospace',
-            fontSize: '9px',
-            lineHeight: '11px',
+            fontSize: `${dims.asciiFont}px`,
+            lineHeight: `${dims.asciiLineHeight}px`,
             whiteSpace: 'pre',
             padding: '10px',
             maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 100%)',
@@ -236,7 +296,7 @@ const ProjectCard: React.FC<{ project: Project }> = React.memo(({ project }) => 
   );
 });
 
-const BackgroundParticles: React.FC = () => {
+const BackgroundParticles: React.FC<{ height: number }> = ({ height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -258,7 +318,7 @@ const BackgroundParticles: React.FC = () => {
       alpha: true,
       antialias: true,
     });
-    renderer.setSize(window.innerWidth, 250);
+    renderer.setSize(window.innerWidth, height);
     renderer.setClearColor(0x000000, 0);
 
     const pCanvas = document.createElement("canvas");
@@ -284,7 +344,7 @@ const BackgroundParticles: React.FC = () => {
 
     for (let i = 0; i < PARTICLE_COUNT; i++) {
       positions[i * 3] = (Math.random() - 0.5) * window.innerWidth * 2;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 250;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * height;
       positions[i * 3 + 2] = 0;
       alphas[i] = Math.random();
       velocities[i] = Math.random() * 60 + 30;
@@ -342,7 +402,7 @@ const BackgroundParticles: React.FC = () => {
       camera.left = -window.innerWidth / 2;
       camera.right = window.innerWidth / 2;
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, 250);
+      renderer.setSize(window.innerWidth, height);
     };
     window.addEventListener('resize', handleResize);
 
@@ -356,10 +416,10 @@ const BackgroundParticles: React.FC = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: 0, width: '100%', height: '250px', zIndex: 0, pointerEvents: 'none' }} />;
+  return <canvas ref={canvasRef} style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: 0, width: '100%', height: `${height}px`, zIndex: 0, pointerEvents: 'none' }} />;
 };
 
-const ScannerAura: React.FC = () => {
+const ScannerAura: React.FC<{ height: number }> = ({ height }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -411,7 +471,7 @@ const ScannerAura: React.FC = () => {
 
     const handleResize = () => {
       canvas.width = window.innerWidth;
-      canvas.height = 250;
+      canvas.height = height;
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -422,10 +482,11 @@ const ScannerAura: React.FC = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: 0, width: '100%', height: '250px', zIndex: 15, pointerEvents: 'none' }} />;
+  return <canvas ref={canvasRef} style={{ position: 'absolute', top: '50%', transform: 'translateY(-50%)', left: 0, width: '100%', height: `${height}px`, zIndex: 15, pointerEvents: 'none' }} />;
 };
 
 const ProjectCardStream: React.FC = () => {
+  const [dims, setDims] = useState<CardDims>(() => getCardDims(window.innerWidth));
   const positionRef = useRef(0);
   const [isDragging, setIsDragging] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -466,7 +527,7 @@ const ProjectCardStream: React.FC = () => {
     },
   ], []);
   const displayProjects = useMemo(() => [...projects, ...projects, ...projects], [projects]);
-  const totalWidth = displayProjects.length * (CARD_WIDTH + CARD_GAP);
+  const totalWidth = displayProjects.length * (dims.cardWidth + CARD_GAP);
 
   useEffect(() => {
     let lastTime = performance.now();
@@ -493,8 +554,8 @@ const ProjectCardStream: React.FC = () => {
 
         for (let i = 0; i < cards.length; i++) {
           const card = cards[i] as HTMLElement;
-          const cardLeft = positionRef.current + i * (CARD_WIDTH + CARD_GAP);
-          const cardRight = cardLeft + CARD_WIDTH;
+          const cardLeft = positionRef.current + i * (dims.cardWidth + CARD_GAP);
+          const cardRight = cardLeft + dims.cardWidth;
 
           const normalCard = card.querySelector('.card-normal') as HTMLElement;
           const asciiCard = card.querySelector('.card-ascii') as HTMLElement;
@@ -502,9 +563,9 @@ const ProjectCardStream: React.FC = () => {
 
           if (cardLeft < scannerRight && cardRight > scannerLeft) {
             const scannerIntersectLeft = Math.max(scannerLeft - cardLeft, 0);
-            const scannerIntersectRight = Math.min(scannerRight - cardLeft, CARD_WIDTH);
-            normalCard.style.setProperty("--clip-right", `${(scannerIntersectLeft / CARD_WIDTH) * 100}%`);
-            asciiCard.style.setProperty("--clip-left", `${(scannerIntersectRight / CARD_WIDTH) * 100}%`);
+            const scannerIntersectRight = Math.min(scannerRight - cardLeft, dims.cardWidth);
+            normalCard.style.setProperty("--clip-right", `${(scannerIntersectLeft / dims.cardWidth) * 100}%`);
+            asciiCard.style.setProperty("--clip-left", `${(scannerIntersectRight / dims.cardWidth) * 100}%`);
           } else {
             if (cardRight < scannerLeft) {
               normalCard.style.setProperty("--clip-right", "100%");
@@ -556,6 +617,15 @@ const ProjectCardStream: React.FC = () => {
   };
 
   useEffect(() => {
+    const handleResize = () => {
+      setDims(getCardDims(window.innerWidth));
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
     if (isDragging) {
       window.addEventListener('mousemove', onMouseMove);
       window.addEventListener('mouseup', onMouseUp);
@@ -579,7 +649,7 @@ const ProjectCardStream: React.FC = () => {
       style={{
         position: 'relative',
         width: '100vw',
-        height: '400px',
+        height: `${dims.containerHeight}px`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -587,7 +657,7 @@ const ProjectCardStream: React.FC = () => {
         background: '#000000',
       }}
     >
-      <BackgroundParticles />
+      <BackgroundParticles height={dims.canvasHeight} />
 
       <div
         className="card-line"
@@ -609,11 +679,12 @@ const ProjectCardStream: React.FC = () => {
           <ProjectCard
             key={`${project.id}-${idx}`}
             project={project}
+            dims={dims}
           />
         ))}
       </div>
 
-      <ScannerAura />
+      <ScannerAura height={dims.canvasHeight} />
 
       <div
         className="scanner-line"
@@ -623,7 +694,7 @@ const ProjectCardStream: React.FC = () => {
           top: '50%',
           transform: 'translate(-50%, -50%)',
           width: '3px',
-          height: '350px',
+          height: `${dims.scannerHeight}px`,
           borderRadius: '30px',
           background: 'linear-gradient(to bottom, transparent, #3B82F6, #3B82F6, #3B82F6, transparent)',
           boxShadow: '0 0 15px #3B82F6, 0 0 30px rgba(59, 130, 246, 0.4)',

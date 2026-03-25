@@ -3,7 +3,7 @@ import Navbar from "./components/layout/Navbar"
 import Footer from "./components/layout/Footer"
 import ContactSection from "./components/features/ContactSection"
 import { WebGLShader } from "./components/ui/web-gl-shader"
-import { LiquidGlassCard } from "./components/ui/liquid-glass-card"
+import AboutSection from "./components/features/AboutSection"
 
 import ProjectCardStream from "./components/features/ProjectCardStream"
 import TechStack from "./components/features/TechStack"
@@ -18,23 +18,7 @@ function App() {
           <HeroSection />
         </section>
 
-        <section
-          id="about"
-          style={{
-            padding: "120px 24px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <div style={{ position: "relative", zIndex: 10, width: "100%", maxWidth: "1100px" }}>
-            <LiquidGlassCard
-              title="About me"
-              description="I am a Computer Science student passionate about software development, AI/ML, and FinTech innovation. I focus on building scalable web applications and backend solutions that solve practical problems. I am motivated by continuous learning, professional growth, and collaboration with experts across both technology and business sectors."
-              imageSrc="images/icon.png"
-            />
-          </div>
-        </section>
+        <AboutSection />
 
         <TechStack />
 
@@ -42,7 +26,7 @@ function App() {
           id="projects"
           style={{
             minHeight: "30svh",
-            padding: "120px 0 140px",
+            padding: "120px 0",
             backgroundColor: "#000000",
             overflow: "hidden",
             display: "flex",
@@ -82,7 +66,7 @@ function App() {
         <section
           id="testimonials"
           style={{
-            padding: "120px 24px 140px",
+            padding: "120px 24px",
             backgroundColor: "#000000",
             display: "flex",
             flexDirection: "column",
@@ -111,7 +95,7 @@ function App() {
           id="contact"
           style={{
             minHeight: "40svh",
-            padding: "120px 24px 140px",
+            padding: "120px 24px",
             backgroundColor: "#000000",
             display: "flex",
             flexDirection: "column",
