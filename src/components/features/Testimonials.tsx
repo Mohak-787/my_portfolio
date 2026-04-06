@@ -19,7 +19,7 @@ const testimonials: CardStackItem[] = [
   },
   {
     id: 3,
-    title: "Ethan Carter",
+    title: "Ashutosh Karki",
     ctaLabel: "Backend Developer",
     description: "Mohak designs efficient, easy-to-use APIs. His work with Node.js and databases is well-structured, showing great attention to detail and performance.",
     imageSrc: "/images/avatar-placeholder.png",
